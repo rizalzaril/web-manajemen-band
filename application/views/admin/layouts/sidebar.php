@@ -39,7 +39,7 @@
 				</li>
 
 				<li class="pc-item">
-					<a href="../elements/bc_typography.html" class="pc-link">
+					<a href="<?= base_url('admin/Dashboard/list_tempat_manggung') ?>" class="pc-link">
 						<span class="pc-micon"><i class="ph ph-gear"></i></span>
 						<span class="pc-mtext">Setting Tempat</span>
 					</a>

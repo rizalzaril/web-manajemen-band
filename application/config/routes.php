@@ -52,3 +52,5 @@ defined('BASEPATH') or exit('No direct script access allowed');
 $route['default_controller'] = 'auth';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+$route['proxy/province'] = 'admin/dashboard/province';
+$route['proxy/city/(:num)'] = 'admin/dashboard/city/$1';

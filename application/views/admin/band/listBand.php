@@ -334,7 +334,7 @@
 
 	// Array of popular music genres
 	// Array of popular music genres
-	const musicGenres = [
+	const musicGenresEdit = [
 		"Pop",
 		"Rock",
 		"Hip Hop",
@@ -370,7 +370,7 @@
 	const musicGenreSelect = document.getElementById("genre-option");
 
 	// Populate the select dropdown
-	musicGenres.forEach((genre) => {
+	musicGenresEdit.forEach((genre) => {
 		const option = document.createElement("option");
 		option.value = genre.toLowerCase(); // Set the value in lowercase
 		option.textContent = genre; // Set the visible text
