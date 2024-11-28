@@ -23,6 +23,10 @@ class BandModel extends CI_Model
 		}
 	}
 
+	public function get_band_count()
+	{
+		return $this->db->count_all('band'); // Ganti 'bands' dengan nama tabel Anda
+	}
 
 	public function getBandById($band_id)
 	{

@@ -14,7 +14,10 @@ class Dashboard extends CI_Controller
 		$this->load->model('Users_model');
 		$this->load->model('BandModel');
 		$this->load->model('TempatManggungModel');
+		$this->load->model('JadwalModel');
 	}
+
+
 
 
 
@@ -22,38 +25,50 @@ class Dashboard extends CI_Controller
 
 	public function index()
 	{
-		$this->load->view('admin/layouts/header');
-		$this->load->view('admin/layouts/navheader');
-		$this->load->view('admin/layouts/sidebar');
-		$this->load->view('admin/layouts/content');
-		$this->load->view('admin/layouts/footer');
+		if ($this->session->userdata('id_user_admin') || $this->session->userdata('username')) {
+			$id_user_admin = $this->session->userdata('id_user_admin'); //session
+
+			$data['band_count'] = $this->BandModel->get_band_count();
+			$data['panggung_count'] = $this->TempatManggungModel->get_count_tempat_manggung();
+
+			$this->load->view('admin/layouts/header', $id_user_admin);
+			$this->load->view('admin/layouts/navheader');
+			$this->load->view('admin/layouts/sidebar');
+			$this->load->view('admin/layouts/content', $data);
+			$this->load->view('admin/layouts/footer');
+		} else {
+			echo "<script>
+			alert('Anda harus Login untuk akses halaman ini!.');
+			window.location.href = '" . base_url() . "'
+		</script>"; // Redirect ke halaman login jika tidak ada session
+		}
 	}
 
-	public function list_jadwal()
-	{
-		$this->load->view('admin/layouts/header');
-		$this->load->view('admin/layouts/navheader');
-		$this->load->view('admin/layouts/sidebar');
-		$this->load->view('admin/jadwal/listJadwal');
-		$this->load->view('admin/layouts/footer');
-	}
+	// ********************* BAND DATA CRUD FUCNTION *********************** \\
 
 	public function list_band()
 	{
 
+		if ($this->session->userdata('id_user_admin') || $this->session->userdata('username')) {
+			$data_band['list_band'] = $this->BandModel->get_all_bands();
 
-		$data_band['list_band'] = $this->BandModel->get_all_bands();
+			// echo '<pre>';
+			// print_r($data_band);
+			// echo '</pre>';
+			// exit(); // Stop script execution
+			$id_user_admin = $this->session->userdata('id_user_admin');
 
-		// echo '<pre>';
-		// print_r($data_band);
-		// echo '</pre>';
-		// exit(); // Stop script execution
-
-		$this->load->view('admin/layouts/header');
-		$this->load->view('admin/layouts/navheader');
-		$this->load->view('admin/layouts/sidebar');
-		$this->load->view('admin/band/listBand', $data_band);
-		$this->load->view('admin/layouts/footer');
+			$this->load->view('admin/layouts/header', $id_user_admin);
+			$this->load->view('admin/layouts/navheader');
+			$this->load->view('admin/layouts/sidebar');
+			$this->load->view('admin/band/listBand', $data_band);
+			$this->load->view('admin/layouts/footer');
+		} else {
+			echo "<script>
+			alert('Anda harus Login untuk akses halaman ini!.');
+			window.location.href = '" . base_url() . "'
+		</script>"; // Redirect ke halaman login jika tidak ada session
+		}
 	}
 
 
@@ -85,7 +100,7 @@ class Dashboard extends CI_Controller
 			if ($result) {
 				$this->session->set_flashdata('success', 'Data successfully saved!');
 			} else {
-				$this->session->set_flashdata('error', 'Failed to save data. Please try again.');
+				// $this->session->set_flashdata('error', 'Failed to save data. Please try again.');
 			}
 		} else {
 			$this->session->set_flashdata('error', 'Failed to save data. Please fill in all fields.');
@@ -191,7 +206,7 @@ class Dashboard extends CI_Controller
 
 
 
-	// ************************** SETTING TEMPAT MANGGUNG FUNCTION ********************** \\
+	// ************************** SETTING TEMPAT MANGGUNG CRUD FUNCTION ********************** \\
 
 	private $api_key = 'fadfcca283fa5c1162a55401d306842f';
 	private $api_url = 'https://api.rajaongkir.com/starter/';
@@ -267,24 +282,33 @@ class Dashboard extends CI_Controller
 	// List Tempat Manggung with Optimized API Calls
 	public function list_tempat_manggung()
 	{
-		// Fetch the list of tempat_manggung from the model
-		$data_tempat['list_tempat_manggung'] = $this->TempatManggungModel->get_all_tempat_manggung();
 
-		// Fetch province and city names
-		foreach ($data_tempat['list_tempat_manggung'] as &$tempat) {
-			// Fetch Provinsi Name
-			$tempat['provinsi_name'] = $this->get_provinsi_name($tempat['provinsi']);
+		if ($this->session->userdata('id_user_admin') || $this->session->userdata('username')) {
+			$id_user_admin = $this->session->userdata('id_user_admin'); //session
+			// Fetch the list of tempat_manggung from the model
+			$data_tempat['list_tempat_manggung'] = $this->TempatManggungModel->get_all_tempat_manggung();
 
-			// Fetch Kota Name
-			$tempat['kota_name'] = $this->get_kota_name($tempat['kota']);
+			// Fetch province and city names
+			foreach ($data_tempat['list_tempat_manggung'] as &$tempat) {
+				// Fetch Provinsi Name
+				$tempat['provinsi_name'] = $this->get_provinsi_name($tempat['provinsi']);
+
+				// Fetch Kota Name
+				$tempat['kota_name'] = $this->get_kota_name($tempat['kota']);
+			}
+
+			// Load views as usual
+			$this->load->view('admin/layouts/header', $id_user_admin);
+			$this->load->view('admin/layouts/navheader');
+			$this->load->view('admin/layouts/sidebar');
+			$this->load->view('admin/tempat/listTempatManggung', $data_tempat);
+			$this->load->view('admin/layouts/footer');
+		} else {
+			echo "<script>
+			alert('Anda harus Login untuk akses halaman ini!.');
+			window.location.href = '" . base_url() . "'
+		</script>"; // Redirect ke halaman login jika tidak ada session
 		}
-
-		// Load views as usual
-		$this->load->view('admin/layouts/header');
-		$this->load->view('admin/layouts/navheader');
-		$this->load->view('admin/layouts/sidebar');
-		$this->load->view('admin/tempat/listTempatManggung', $data_tempat);
-		$this->load->view('admin/layouts/footer');
 	}
 
 	// Fetch the cached or fresh data for provinsi or kota
@@ -373,7 +397,7 @@ class Dashboard extends CI_Controller
 			if ($result) {
 				$this->session->set_flashdata('success', 'Data successfully saved!');
 			} else {
-				$this->session->set_flashdata('error', 'Failed to save data. Please try again.');
+				// $this->session->set_flashdata('error', 'Failed to save data. Please try again.');
 			}
 		} else {
 			$this->session->set_flashdata('error', 'Failed to save data. Please fill in all fields.');
@@ -437,7 +461,7 @@ class Dashboard extends CI_Controller
 			$result = $this->TempatManggungModel->deleteTempatmanggung($tempat_id);
 
 			if ($result) {
-				$this->session->set_flashdata('success', 'Data successfully deleted!');
+				// $this->session->set_flashdata('success', 'Data successfully deleted!');
 			} else {
 				$this->session->set_flashdata('error', 'Failed to delete data. Please try again.');
 			}
@@ -447,5 +471,38 @@ class Dashboard extends CI_Controller
 
 		// Redirect to the list page
 		redirect('/admin/dashboard/list_tempat_manggung');
+	}
+
+	//  ************************* JADWAL CRUD FUNCTION ************************* \\
+
+	public function list_jadwal()
+	{
+
+		if ($this->session->userdata('id_user_admin') || $this->session->userdata('username')) {
+			$id_user_admin = $this->session->userdata('id_user_admin'); //session
+			// Fetch the list of tempat_manggung from the model
+			$data_jadwal['list_jadwal'] = $this->JadwalModel->get_all_jadwal();
+
+			// Fetch province and city names
+			// foreach ($data_jadwal['list_jadwal'] as &$tempat) {
+			// 	// Fetch Provinsi Name
+			// 	$tempat['provinsi_name'] = $this->get_provinsi_name($tempat['provinsi']);
+
+			// 	// Fetch Kota Name
+			// 	$tempat['kota_name'] = $this->get_kota_name($tempat['kota']);
+			// }
+
+			// Load views as usual
+			$this->load->view('admin/layouts/header', $id_user_admin);
+			$this->load->view('admin/layouts/navheader');
+			$this->load->view('admin/layouts/sidebar');
+			$this->load->view('admin/jadwal/listJadwal', $data_jadwal);
+			$this->load->view('admin/layouts/footer');
+		} else {
+			echo "<script>
+			alert('Anda harus Login untuk akses halaman ini!.');
+			window.location.href = '" . base_url() . "'
+		</script>"; // Redirect ke halaman login jika tidak ada session
+		}
 	}
 }

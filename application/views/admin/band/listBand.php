@@ -6,7 +6,7 @@
 		<div class="col-sm-12">
 			<div class="card table-card">
 				<div class="card-header">
-					<h5>List Band</h5>
+					<h3>List Band</h3>
 				</div>
 				<div class="card-body p-1">
 

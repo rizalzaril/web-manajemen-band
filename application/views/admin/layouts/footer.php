@@ -80,7 +80,25 @@
 </script>
 
 
+<script>
+	<?php if ($this->session->flashdata('success')): ?>
+		Swal.fire({
+			icon: 'success',
+			title: 'Berhasil!',
+			text: '<?= $this->session->flashdata('success'); ?>',
+			confirmButtonText: 'OK'
+		});
+	<?php endif; ?>
 
+	<?php if ($this->session->flashdata('error')): ?>
+		Swal.fire({
+			icon: 'error',
+			title: 'Gagal!',
+			text: '<?= $this->session->flashdata('error'); ?>',
+			confirmButtonText: 'Coba Lagi'
+		});
+	<?php endif; ?>
+</script>
 
 </body>
 <!-- [Body] end -->

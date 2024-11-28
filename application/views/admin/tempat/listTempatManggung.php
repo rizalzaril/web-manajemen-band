@@ -340,7 +340,7 @@
 				text: 'Kamu akan update data band',
 				icon: 'warning',
 				showCancelButton: true,
-				confirmButtonText: 'Ya, update data band!',
+				confirmButtonText: 'Ya, update data tempat manggung!',
 				cancelButtonText: 'Tidak, batal update data band!',
 				reverseButtons: true
 			}).then((result) => {
@@ -353,7 +353,7 @@
 						'success'
 					);
 				} else {
-					Swal.fire('Dibatalkan', 'Data band batal di update :)',
+					Swal.fire('Dibatalkan', 'Data tempat manggung batal di update :)',
 						'error'); // Cancel the deletion
 				}
 			});

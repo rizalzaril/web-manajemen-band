@@ -45,18 +45,14 @@ class Auth extends CI_Controller
 			redirect('/'); // Jika password salah, kembali ke halaman login
 		} elseif ($user) {
 			// Menyimpan data user ke session
-			$this->session->set_userdata('id_user', $user->id_user);
+			$this->session->set_userdata('id_user_admin', $user->id_user_admin);
 			$this->session->set_userdata('username', $user->name);
-			$this->session->set_userdata('role', $user->role);
 
-			// Mengarahkan ke halaman sesuai dengan role
-			if ($user->role == 'admin') {
-				redirect('admin/dashboard'); // Redirect ke dashboard admin
-			} elseif ($user->role == 'band') {
-				redirect('band/dashboard'); // Redirect ke dashboard band
-			} else {
-				redirect('client/dashboard'); // Redirect ke dashboard client
-			}
+
+			// Mengarahkan ke halaman 
+			$this->session->set_flashdata('success', 'Berhasil login! Selamat datang, ' . $user->name);
+			redirect('admin/dashboard'); // Redirect ke dashboard admin
+
 		} else {
 			$this->session->set_flashdata('error', 'Username atau password salah');
 			redirect('/'); // Jika login gagal, kembali ke halaman login
@@ -105,7 +101,6 @@ class Auth extends CI_Controller
 			'name' => $name,
 			'username' => $username, // Menyimpan username
 			'password' => $hashed_password,
-			'role' => 'admin' // Menentukan role sebagai admin
 		];
 
 		$this->Users_model->insert_user($data);
@@ -120,7 +115,13 @@ class Auth extends CI_Controller
 	// Logout
 	public function logout()
 	{
+		// Menghancurkan sesi pengguna
 		$this->session->sess_destroy();
-		redirect('/'); // Mengarahkan ke halaman login setelah logout
+
+		// Mengatur pesan flash untuk notifikasi logout berhasil
+		$this->session->set_flashdata('message', 'Anda berhasil logout!');
+
+		// Mengarahkan pengguna ke halaman login
+		redirect('/');
 	}
 }

@@ -13,7 +13,7 @@ class Users_model extends CI_Model
 	{
 		// Memilih data pengguna berdasarkan username
 		$this->db->where('username', $username);
-		$query = $this->db->get('users');
+		$query = $this->db->get('user_admin');
 
 		if ($query->num_rows() > 0) {
 			$user = $query->row();
@@ -35,13 +35,13 @@ class Users_model extends CI_Model
 	public function get_user_by_username($username)
 	{
 		$this->db->where('username', $username);
-		$query = $this->db->get('users');
+		$query = $this->db->get('user_admin');
 		return $query->row(); // Mengembalikan baris data jika ditemukan, atau NULL jika tidak ada
 	}
 
 	// Fungsi untuk memasukkan pengguna baru ke database
 	public function insert_user($data)
 	{
-		$this->db->insert('users', $data); // Menyimpan data pengguna baru
+		$this->db->insert('user_admin', $data); // Menyimpan data pengguna baru
 	}
 }

@@ -23,6 +23,11 @@ class TempatManggungModel extends CI_Model
 		}
 	}
 
+	public function get_count_tempat_manggung()
+	{
+		return $this->db->count_all('tempat_manggung');
+	}
+
 
 	public function getTempatManggungById($band_id)
 	{

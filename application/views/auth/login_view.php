@@ -48,6 +48,12 @@
 				<div class="card my-5">
 					<div class="card-body">
 						<div class="text-center">
+							<?php if ($this->session->flashdata('message')): ?>
+								<script>
+									alert("<?= $this->session->flashdata('message'); ?>");
+								</script>
+							<?php endif; ?>
+
 							<img src="../assets/images/logo-dark.svg" alt="images" class="img-fluid mb-4">
 							<h4 class="f-w-500 mb-1">Login with your email</h4>
 							<?php if ($this->session->flashdata('error')): ?>
