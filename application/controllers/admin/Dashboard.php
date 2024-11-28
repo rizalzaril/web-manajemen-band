@@ -483,14 +483,14 @@ class Dashboard extends CI_Controller
 			// Fetch the list of tempat_manggung from the model
 			$data_jadwal['list_jadwal'] = $this->JadwalModel->get_all_jadwal();
 
-			// Fetch province and city names
-			// foreach ($data_jadwal['list_jadwal'] as &$tempat) {
-			// 	// Fetch Provinsi Name
-			// 	$tempat['provinsi_name'] = $this->get_provinsi_name($tempat['provinsi']);
+			//Fetch province and city names
+			foreach ($data_jadwal['list_jadwal'] as &$tempat) {
+				// Fetch Provinsi Name
+				$tempat['provinsi_name'] = $this->get_provinsi_name($tempat['provinsi']);
 
-			// 	// Fetch Kota Name
-			// 	$tempat['kota_name'] = $this->get_kota_name($tempat['kota']);
-			// }
+				// Fetch Kota Name
+				$tempat['kota_name'] = $this->get_kota_name($tempat['kota']);
+			}
 
 			// Load views as usual
 			$this->load->view('admin/layouts/header', $id_user_admin);

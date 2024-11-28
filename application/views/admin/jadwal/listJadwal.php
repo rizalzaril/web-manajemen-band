@@ -6,7 +6,7 @@
 		<div class="col-sm-12">
 			<div class="card table-card">
 				<div class="card-header">
-					<h3>List Tempat Manggung</h3>
+					<h3>List Jadwal Manggung</h3>
 				</div>
 				<div class="card-body p-1">
 
@@ -18,7 +18,7 @@
 						</button>
 					</div>
 
-					<!-- Modal -->
+					<!-- Modal add data -->
 					<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 						<div class="modal-dialog  modal-dialog-scrollable">
 							<div class="modal-content">
@@ -124,9 +124,6 @@
 							</div>
 						</div>
 					</div>
-
-
-
 					<!-- end Modal -->
 
 
@@ -140,6 +137,10 @@
 						</li>
 						<li class="nav-item" role="presentation">
 							<button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Selesai</button>
+						</li>
+
+						<li class="nav-item" role="presentation">
+							<button class="nav-link" id="cancel-tab" data-bs-toggle="tab" data-bs-target="#cancel-tab-pane" type="button" role="tab" aria-controls="cancel-tab-pane" aria-selected="false">Batal Hadir</button>
 						</li>
 					</ul>
 					<div class="tab-content" id="myTabContent">
@@ -176,7 +177,7 @@
 														<td><?= htmlspecialchars($data['nama_band']); ?></td>
 														<td><?= htmlspecialchars($data['genre']); ?></td>
 														<td><?= htmlspecialchars($data['nama_tempat_manggung']); ?></td>
-														<td><?= htmlspecialchars($data['alamat']); ?>,<?= htmlspecialchars($data['kota']); ?>, <?= htmlspecialchars($data['provinsi']); ?> </td>
+														<td><?= htmlspecialchars($data['alamat']); ?>, <?= '', htmlspecialchars($data['kota_name']); ?>, <?= '', htmlspecialchars($data['provinsi_name']); ?> </td>
 														<td><?= htmlspecialchars($data['date']); ?></td>
 														<td><?= htmlspecialchars($data['time']); ?></td>
 														<td>
@@ -193,6 +194,60 @@
 																<span class="badge text-bg-danger"><?= htmlspecialchars($data['status']); ?></span>
 
 															<?php } ?>
+
+															<button type="button" class="badge text-bg-dark mb-3 mt-3" data-bs-toggle="modal" data-bs-target="#ModalStatus">
+																Ubah status <i class="ph ph-pencil"></i>
+															</button>
+
+															<!-- Modal ubah status -->
+															<div class="modal fade" id="ModalStatus" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+																<div class="modal-dialog modal-dialog-centered  modal-dialog-scrollable">
+																	<div class="modal-content">
+																		<div class="modal-header text-white" style="background:#800000">
+																			<h1 class="modal-title fs-5" id="exampleModalLabel">Ubah Status Jadwal</h1>
+																			<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+																		</div>
+
+																		<div class="modal-body">
+																			<div class="container">
+																				<form method="post" action="<?= base_url('admin/dashboard/simpan_data_panggung') ?>" class="save-form">
+																					<div id="form-container" style="max-height: 800px; overflow-y: auto;">
+																						<div class="card mb-3 mt-3">
+																							<div class="card-body">
+																								<div class="modal-body" style="max-height: 500px; overflow-y: auto;">
+
+																									<!-- Status -->
+																									<div class="form-group mb-3">
+																										<label for="city1" class="form-label">Status</label>
+																										<select id="city1" name="kota[]" required class="city form-control">
+																											<option value="Pending">Pending</option>
+																											<option value="Hadir">Hadir</option>
+																											<option value="Selesai">Selesai</option>
+																											<option value="Batal hadir">Batal hadir</option>
+																										</select>
+																									</div>
+
+																								</div>
+																							</div>
+																						</div>
+																					</div>
+
+
+
+																					<div class="modal-footer">
+																						<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
+																						<button type="submit" class="btn btn-dark">Update</button>
+																					</div>
+																				</form>
+
+
+
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<!-- End Modal ubah status -->
 
 														</td>
 														<td><?= htmlspecialchars($data['contact']); ?></td>
@@ -362,7 +417,7 @@
 														<td><?= htmlspecialchars($data['nama_band']); ?></td>
 														<td><?= htmlspecialchars($data['genre']); ?></td>
 														<td><?= htmlspecialchars($data['nama_tempat_manggung']); ?></td>
-														<td><?= htmlspecialchars($data['id_tempat_manggung']); ?></td>
+														<td><?= htmlspecialchars($data['alamat']); ?>, <?= '', htmlspecialchars($data['kota_name']); ?>, <?= '', htmlspecialchars($data['provinsi_name']); ?> </td>
 														<td><?= htmlspecialchars($data['date']); ?></td>
 														<td><?= htmlspecialchars($data['time']); ?></td>
 														<td>
@@ -379,6 +434,59 @@
 																<span class="badge text-bg-danger"><?= htmlspecialchars($data['status']); ?></span>
 
 															<?php } ?>
+
+															<button type="button" class="badge text-bg-dark mb-3 mt-3" data-bs-toggle="modal" data-bs-target="#ModalStatus2">
+																Ubah status <i class="ph ph-pencil"></i>
+															</button>
+															<!-- Modal ubah status -->
+															<div class="modal fade" id="ModalStatus2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+																<div class="modal-dialog modal-dialog-centered  modal-dialog-scrollable">
+																	<div class="modal-content">
+																		<div class="modal-header text-white" style="background:#800000">
+																			<h1 class="modal-title fs-5" id="exampleModalLabel">Ubah Status Jadwal</h1>
+																			<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+																		</div>
+
+																		<div class="modal-body">
+																			<div class="container">
+																				<form method="post" action="<?= base_url('admin/dashboard/simpan_data_panggung') ?>" class="save-form">
+																					<div id="form-container" style="max-height: 800px; overflow-y: auto;">
+																						<div class="card mb-3 mt-3">
+																							<div class="card-body">
+																								<div class="modal-body" style="max-height: 500px; overflow-y: auto;">
+
+																									<!-- Status -->
+																									<div class="form-group mb-3">
+																										<label for="city1" class="form-label">Status</label>
+																										<select id="city1" name="kota[]" required class="city form-control">
+																											<option value="Pending">Pending</option>
+																											<option value="Hadir">Hadir</option>
+																											<option value="Selesai">Selesai</option>
+																											<option value="Batal hadir">Batal hadir</option>
+																										</select>
+																									</div>
+
+																								</div>
+																							</div>
+																						</div>
+																					</div>
+
+
+
+																					<div class="modal-footer">
+																						<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
+																						<button type="submit" class="btn btn-dark">Update</button>
+																					</div>
+																				</form>
+
+
+
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<!-- End Modal ubah status -->
 
 														</td>
 														<td><?= htmlspecialchars($data['contact']); ?></td>
@@ -439,7 +547,84 @@
 														<td><?= htmlspecialchars($data['nama_band']); ?></td>
 														<td><?= htmlspecialchars($data['genre']); ?></td>
 														<td><?= htmlspecialchars($data['nama_tempat_manggung']); ?></td>
-														<td><?= htmlspecialchars($data['id_tempat_manggung']); ?></td>
+														<td><?= htmlspecialchars($data['alamat']); ?>, <?= '', htmlspecialchars($data['kota_name']); ?>, <?= '', htmlspecialchars($data['provinsi_name']); ?> </td>
+														<td><?= htmlspecialchars($data['date']); ?></td>
+														<td><?= htmlspecialchars($data['time']); ?></td>
+														<td>
+															<?php if ($data['status'] == 'Pending') { ?>
+
+																<span class="badge text-bg-warning"><?= htmlspecialchars($data['status']); ?></span>
+
+															<?php } elseif ($data['status'] == 'Hadir') { ?>
+
+																<span class="badge text-bg-success"><?= htmlspecialchars($data['status']); ?></span>
+
+															<?php } else { ?>
+
+																<span class="badge text-bg-danger"><?= htmlspecialchars($data['status']); ?></span>
+
+															<?php } ?>
+
+														</td>
+														<td><?= htmlspecialchars($data['contact']); ?></td>
+
+													</tr>
+												<?php } ?>
+											<?php endforeach; ?>
+										<?php else : ?>
+											<tr>
+												<td colspan="5" class="text-center">Tidak ada data tempat manggung yang tersedia.</td>
+											</tr>
+										<?php endif; ?>
+									</tbody>
+
+									<tfoot>
+										<tr>
+											<th>No</th>
+											<th>Nama Band</th>
+											<th>Genre</th>
+											<th>Tempat Manggung</th>
+											<th>Alamat</th>
+											<th>Tanggal</th>
+											<th>Waktu</th>
+											<th>Status</th>
+											<th>Kontak Band</th>
+
+										</tr>
+									</tfoot>
+								</table>
+
+							</div>
+						</div>
+						<!-- tab jadwal batal hadir -->
+						<div class="tab-pane fade" id="cancel-tab-pane" role="tabpanel" aria-labelledby="cancel-tab" tabindex="0">
+							<div class=" table-responsive">
+								<table id="list_jadwal" class="table table-striped" style="width:100%">
+									<thead>
+										<tr>
+											<th>No</th>
+											<th>Nama Band</th>
+											<th>Genre</th>
+											<th>Tempat Manggung</th>
+											<th>Alamat</th>
+											<th>Tanggal</th>
+											<th>Waktu</th>
+											<th>Status</th>
+											<th>Kontak Band</th>
+
+										</tr>
+									</thead>
+									<tbody>
+										<?php if (!empty($list_jadwal)) : ?>
+											<?php $no = 1; ?>
+											<?php foreach ($list_jadwal as $data) : ?>
+												<?php if ($data['status'] == 'Batal hadir') { ?>
+													<tr>
+														<td><?= $no++; ?></td>
+														<td><?= htmlspecialchars($data['nama_band']); ?></td>
+														<td><?= htmlspecialchars($data['genre']); ?></td>
+														<td><?= htmlspecialchars($data['nama_tempat_manggung']); ?></td>
+														<td><?= htmlspecialchars($data['alamat']); ?>, <?= '', htmlspecialchars($data['kota_name']); ?>, <?= '', htmlspecialchars($data['provinsi_name']); ?> </td>
 														<td><?= htmlspecialchars($data['date']); ?></td>
 														<td><?= htmlspecialchars($data['time']); ?></td>
 														<td>
