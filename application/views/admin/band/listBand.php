@@ -101,7 +101,7 @@
 													</form>
 
 													<!-- Edit Button -->
-													<input type="text" name="band_ids[]" value="<?= $band['id_band'] ?>" />
+													<!-- <input type="text" name="band_ids[]" value="<?= $band['id_band'] ?>" /> -->
 													<button class="btn btn-primary text-white"
 														data-bs-toggle="modal"
 														data-bs-target="#modalEditBand"
@@ -109,7 +109,7 @@
 														data-name="<?= htmlspecialchars($band['nama_band']); ?>"
 														data-genre="<?= htmlspecialchars($band['genre']); ?>"
 														data-contact="<?= htmlspecialchars($band['contact']); ?>">
-														<i class=" ph ph-pencil"></i> <?= $band['id_band'] ?>
+														<i class=" ph ph-pencil"></i>
 													</button>
 
 													<!-- Modal Edit Band -->

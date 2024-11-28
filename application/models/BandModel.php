@@ -12,15 +12,17 @@ class BandModel extends CI_Model
 
 	public function get_all_bands()
 	{
-		// Mengambil semua data dari tabel 'band'
+		// Mengambil semua data dari tabel 'band' dan mengurutkan berdasarkan 'id_band' secara menurun (DESC)
+		$this->db->order_by('id_band', 'DESC');
 		$query = $this->db->get('band');
+
 		if (!$query) {
 			echo ("<script>alert('data kosong')</script>");
 		} else {
-			# code...
 			return $query->result_array(); // Mengembalikan hasil dalam bentuk array
 		}
 	}
+
 
 	public function getBandById($band_id)
 	{
