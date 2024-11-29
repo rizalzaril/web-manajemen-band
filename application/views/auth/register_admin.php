@@ -42,7 +42,7 @@
 	</div>
 	<!-- [ Pre-loader ] End -->
 
-	<div class="auth-main v1 bg-grd-primary">
+	<div class="auth-main v1 bg-grd-primary" style="background:#800000">
 		<div class="auth-wrapper">
 			<div class="auth-form">
 				<div class="card my-5">
