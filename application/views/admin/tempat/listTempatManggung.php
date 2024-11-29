@@ -360,47 +360,10 @@
 		});
 	});
 	// END SAVE ALERT //
-
-
-	document.addEventListener('DOMContentLoaded', function() {
-		// Attach event listener to all "Edit" buttons
-		document.querySelectorAll('[data-bs-toggle="modal"]').forEach(button => {
-			button.addEventListener('click', function() {
-				const bandId = this.getAttribute('data-band-id'); // Get the band ID from the button
-				console.log('Band ID:', bandId); // For debugging
-
-				// Now you can use the bandId to fetch more details about the band or populate modal fields
-				// Example: Set the value of a hidden field inside the modal
-				document.getElementById('modalBandIdField').value = bandId;
-
-				// Optionally, make an AJAX request to get more details about the band based on the ID
-			});
-		});
-	});
 </script>
 
 
-<script>
-	// JavaScript to populate the modal dynamically
-	document.addEventListener('DOMContentLoaded', function() {
-		var editButtons = document.querySelectorAll('[data-bs-target="#modalEditBand"]');
 
-		editButtons.forEach(function(button) {
-			button.addEventListener('click', function() {
-				var bandId = button.getAttribute('data-id');
-				var bandName = button.getAttribute('data-name');
-				var bandGenre = button.getAttribute('data-genre');
-				var bandContact = button.getAttribute('data-contact');
-
-				// Populate the modal fields with the clicked band's data
-				document.getElementById('modalBandIdField').value = bandId;
-				document.getElementById('namaBand').value = bandName;
-				document.getElementById('genre-option').value = bandGenre;
-				document.getElementById('contact').value = bandContact;
-			});
-		});
-	});
-</script>
 
 <!-- API PROVINSI DAN KOTA RAJAONGKIR -->
 

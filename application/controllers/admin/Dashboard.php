@@ -30,7 +30,8 @@ class Dashboard extends CI_Controller
 
 			$data['band_count'] = $this->BandModel->get_band_count();
 			$data['panggung_count'] = $this->TempatManggungModel->get_count_tempat_manggung();
-
+			$data['jadwal_count'] = $this->JadwalModel->get_count_jadwal();
+			$data['list_jadwal'] = $this->JadwalModel->get_all_jadwal();
 			$this->load->view('admin/layouts/header', $id_user_admin);
 			$this->load->view('admin/layouts/navheader');
 			$this->load->view('admin/layouts/sidebar');
@@ -484,6 +485,7 @@ class Dashboard extends CI_Controller
 			$data['list_jadwal'] = $this->JadwalModel->get_all_jadwal();
 			$data['list_band'] = $this->BandModel->get_all_bands();
 			$data['list_panggung'] = $this->TempatManggungModel->get_all_tempat_manggung();
+			$data['list_konser'] = $this->JadwalModel->get_all_konser();
 
 			//Fetch province and city names
 			foreach ($data['list_jadwal'] as &$tempat) {
@@ -556,6 +558,7 @@ class Dashboard extends CI_Controller
 		$tempat_manggung = $this->input->post('tempat_manggung'); // Array of tempat names
 		$date = $this->input->post('date'); // Array of dates
 		$time = $this->input->post('time'); // Array of times
+		$jenis_konser = $this->input->post('jenis_konser'); // Array of jenis
 
 		// Initialize data and error array
 		$data = [];
@@ -567,6 +570,7 @@ class Dashboard extends CI_Controller
 					// Get band name and tempat name
 					$band_name = $this->BandModel->getBandNameById($band_id);
 					$tempat_name = $this->JadwalModel->getTempatNameById($tempat_manggung[$key]);
+
 
 					// Check for conflicts with the same band at the same time and place
 					$is_conflict = $this->JadwalModel->checkConflict($band_id, $tempat_manggung[$key], $date[$key], $time[$key]);
@@ -594,6 +598,7 @@ class Dashboard extends CI_Controller
 									'id_tempat_manggung' => $tempat_manggung[$key],
 									'date' => $date[$key],
 									'time' => $time[$key],
+									'id_jenis_konser' => $jenis_konser[$key],
 								];
 							}
 						}
@@ -617,6 +622,149 @@ class Dashboard extends CI_Controller
 		}
 
 		// Redirect to the list of jadwal
+		redirect('/admin/dashboard/list_jadwal');
+	}
+
+
+	// Assuming you're using CodeIgniter or a similar framework
+	public function get_jadwal_by_id()
+	{
+		$jadwal_id = $this->input->post('id_jadwal_status'); // Retrieve the ID from the AJAX request
+
+		if ($jadwal_id) {
+
+			$jadwal = $this->JadwalModel->getJadwalById($jadwal_id); // Get data from the database
+
+			if ($jadwal) {
+				echo json_encode(['success' => true, 'data' => $jadwal]);
+			} else {
+				echo json_encode(['success' => false, 'message' => 'Jadwal not found']);
+			}
+		} else {
+			echo json_encode(['success' => false, 'message' => 'Invalid ID']);
+		}
+	}
+
+
+	public function update_status()
+	{
+		// Get the data from the form
+		$jadwal_status_id = $this->input->post('id_jadwal_status');
+		$status = $this->input->post('status');
+
+
+		// Validate the data
+		if (!empty($status)) {
+			// Prepare data for updating
+			$data = [
+				'status' => $status,
+			];
+
+
+			// Update the band data in the database
+			$result = $this->JadwalModel->updateStatus($jadwal_status_id, $data);
+
+			// if ($result) {
+			// 	$this->session->set_flashdata('success', 'Status data updated successfully!');
+			// } else {
+			// 	$this->session->set_flashdata('error', 'Failed to update status data.');
+			// }
+		} else {
+			$this->session->set_flashdata('error', 'Please fill all the fields.');
+		}
+
+		// Redirect back to the list page
+		redirect('/admin/dashboard/list_jadwal');
+	}
+
+
+	public function update_jadwal()
+	{
+		// Get form input data
+		$id_jadwal = $this->input->post('id_jadwal');
+		$id_band = $this->input->post('id_band');
+		$id_tempat = $this->input->post('id_tempat');
+		$jenis_konser = $this->input->post('jenis_konser');
+		$date = $this->input->post('date');
+		$time = $this->input->post('time');
+
+		// Ensure input data is provided
+		if (empty($id_jadwal) || empty($id_band) || empty($id_tempat) || empty($date) || empty($time)) {
+			$this->session->set_flashdata('error', 'Semua data harus diisi!');
+			redirect('/admin/dashboard/list_jadwal');
+			return;
+		}
+
+		// Get the tempat name to avoid direct access to the model in multiple places
+		$tempat_name = $this->JadwalModel->getTempatNameById($id_tempat);
+
+		if (empty($tempat_name)) {
+			$this->session->set_flashdata('error', 'Tempat tidak ditemukan.');
+			redirect('/admin/dashboard/list_jadwal');
+			return;
+		}
+
+		// Check if there's a conflict with the same band at the same time and place
+		$is_conflict = $this->JadwalModel->checkConflict($id_band, $tempat_name, $date, $time, $id_jadwal);
+		if ($is_conflict) {
+			$this->session->set_flashdata('error', "Jadwal bentrok: Band sudah terjadwal pada tanggal {$date} jam {$time} di tempat {$tempat_name}.");
+			redirect('/admin/dashboard/list_jadwal');
+			return;
+		}
+
+		// Check if another band has the same time slot at the same place (excluding current schedule)
+		$is_time_conflict = $this->JadwalModel->checkConflictForOtherBands($id_band, $id_tempat, $date, $time, $id_jadwal);
+		if ($is_time_conflict) {
+			$this->session->set_flashdata('error', "Jadwal bentrok: Band lain sudah terjadwal pada tanggal {$date} jam {$time} di tempat {$tempat_name}.");
+			redirect('/admin/dashboard/list_jadwal');
+			return;
+		}
+
+		// Proceed to update the schedule in the database
+		$updated = $this->JadwalModel->updateJadwal($id_jadwal, [
+			'id_band' => $id_band,
+			'id_tempat_manggung' => $id_tempat,
+			'id_jenis_konser' => $jenis_konser,
+			'date' => $date,
+			'time' => $time
+		]);
+
+		// Check if update was successful
+		if ($updated) {
+			// Success
+			$this->session->set_flashdata('message', 'Jadwal updated successfully!');
+		} else {
+			// Failure
+			$this->session->set_flashdata('error', 'Failed to update jadwal.');
+		}
+
+		redirect('/admin/dashboard/list_jadwal');
+	}
+
+
+	public function hapus_data_jadwal()
+	{
+		// Retrieve the band IDs to delete
+		$id_jadwal = $this->input->post('id_jadwal'); // Array of band IDs to be deleted
+
+		// Check if band IDs are provided
+		if (!empty($id_jadwal)) {
+
+
+
+			// Attempt to delete the  by IDs
+			$result = $this->JadwalModel->deleteJadwal($id_jadwal);
+
+			if ($result) {
+				// $this->session->set_flashdata('success', 'Data successfully deleted!');
+			} else {
+				$this->session->set_flashdata('error', 'Failed to delete data. Please try again.');
+			}
+		} else {
+			$this->session->set_flashdata('error', 'No band IDs provided for deletion.');
+		}
+
+		// Redirect to the list page
 		redirect('/admin/dashboard/list_jadwal');
 	}
 }

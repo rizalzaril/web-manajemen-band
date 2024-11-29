@@ -79,8 +79,6 @@
 								<h6 class="f-w-400 mb-0">Forgot Password?</h6>
 							</a>
 						</div>
-						<p class="mt-5">Register as Band Members <a href="<?= base_url('Band_members/register'); ?>" class="link-primary ms-1">Register Here</a></p>
-						<p class="mt-1">Register as Client <a href="<?= base_url('Client/register'); ?>" class="link-primary ms-1">Register Here</a></p>
 
 					</div>
 				</div>

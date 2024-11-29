@@ -64,8 +64,22 @@ class JadwalModel extends CI_Model
 			->join('band', 'band.id_band = jadwal_manggung.id_band')
 			->join('tempat_manggung', 'tempat_manggung.id_tempat_manggung = jadwal_manggung.id_tempat_manggung')
 			->join('user_admin', 'user_admin.id_user_admin = jadwal_manggung.id_user_admin')
+			->join('jenis_konser', 'jenis_konser.id_jenis_konser = jadwal_manggung.id_jenis_konser')
 			->order_by('jadwal_manggung.id_jadwal', 'DESC')
 			->get();
+
+		if (!$query) {
+			echo ("<script>alert('data kosong')</script>");
+		} else {
+			return $query->result_array(); // Mengembalikan hasil dalam bentuk array
+		}
+	}
+
+	public function get_all_konser()
+	{
+		// Mengambil semua data dari tabel 'band' dan mengurutkan berdasarkan 'id_band' secara menurun (DESC)
+		$this->db->order_by('id_jenis_konser', 'DESC');
+		$query = $this->db->get('jenis_konser');
 
 		if (!$query) {
 			echo ("<script>alert('data kosong')</script>");
@@ -84,8 +98,8 @@ class JadwalModel extends CI_Model
 
 	public function getJadwalById($jadwal_id)
 	{
-		$this->db->where('id_jadwal', $jadwal_id);  // Assuming the column name is id_band
-		$query = $this->db->get('jadwal_manggung'); // 'bands' is the table name
+		$this->db->where('id_jadwal', $jadwal_id);
+		$query = $this->db->get('jadwal_manggung');
 		if ($query->num_rows() > 0) {
 			return $query->row_array(); // Fetch single row as an associative array
 		} else {
@@ -94,19 +108,26 @@ class JadwalModel extends CI_Model
 	}
 
 
-	public function updateJadwal($jadwal_id, $data)
+	public function updateJadwal($id_jadwal, $data)
 	{
-		// Update the data in the database where band_id matches
-		$this->db->where('id_jadwal', $jadwal_id);
-		return $this->db->update('jadwal_manggung	', $data); // Assuming 'bands' is your table name
+		// Update the data in the database where jadwal_id matches
+		$this->db->where('id_jadwal', $id_jadwal);
+		return $this->db->update('jadwal_manggung	', $data);
 	}
 
-	public function deleteTempatmanggung($jadwal_id)
+	public function updateStatus($jadwal_status_id, $data)
+	{
+		// Update the data in the database where jadwal_id matches
+		$this->db->where('id_jadwal', $jadwal_status_id);
+		return $this->db->update('jadwal_manggung	', $data);
+	}
+
+	public function deleteJadwal($jadwal_id)
 	{
 		// Ensure $band_ids is an array
 		if (is_array($jadwal_id)) {
-			$this->db->where_in('id_jadwal', $jadwal_id); // Assuming 'id_band' is the primary key
-			return $this->db->delete('jadwal_manggung'); // 'bands' is the name of the table
+			$this->db->where_in('id_jadwal', $jadwal_id);
+			return $this->db->delete('jadwal_manggung');
 		}
 		return false;
 	}

@@ -15,13 +15,11 @@
 			</div>
 
 			<div class="col-md-4 ">
-
 				<div class="card bg-brand-color-10 order-card">
 					<div class="card-body">
 						<h6 class="text-white">Jumlah List Jadwal</h6>
-						<h2 class="text-end text-white"><i class="feather icon-file float-start"></i><span>0</span>
+						<h2 class="text-end text-white"><i class="feather icon-file float-start"></i><?php echo $jadwal_count > 0 ? $jadwal_count : 'Belum ada data'; ?></span>
 						</h2>
-
 					</div>
 				</div>
 
@@ -45,9 +43,6 @@
 					</div>
 				</a>
 			</div>
-
-
-
 		</div>
 
 	</div>
