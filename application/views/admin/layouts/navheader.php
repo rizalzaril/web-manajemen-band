@@ -1,9 +1,10 @@
 	 <!-- [ Header Topbar ] start -->
 	 <header class="pc-header " style="background:#800000">
 	 	<div class="m-header">
-	 		<a href="<?= base_url('admin/dashboard') ?>" class="b-brand text-primary">
+	 		<a href="<?= base_url('admin/dashboard') ?>" style="text-decoration:none" class="b-brand text-primary">
 	 			<!-- ========   Change your logo from here   ============ -->
-	 			<img src="<?= base_url('./assets/images/logo-white.svg') ?>" alt="logo image" class="logo-lg">
+	 			<!-- <img src="<?= base_url('./assets/images/logo-white.svg') ?>" alt="logo image" class="logo-lg"> -->
+	 			<h5 class="text-white">Manajemen Band App</h5>
 	 		</a>
 	 	</div>
 	 	<div class="header-wrapper"> <!-- [Mobile Media Block] start -->
@@ -39,10 +40,13 @@
 	 		<!-- [Mobile Media Block end] -->
 	 		<div class="ms-auto">
 	 			<ul class="list-unstyled">
-	 				<li class="dropdown pc-h-item header-user-profile">
-	 					<a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#" role="button"
+	 				<li class="dropdown pc-h-item header-user-profile text-center">
+	 					<a class="pc-head-link dropdown-toggle arrow-none me-0 d-flex gap-2" data-bs-toggle="dropdown" href="#" role="button"
 	 						aria-haspopup="false" data-bs-auto-close="outside" aria-expanded="false">
 	 						<img src="<?= base_url('./assets/images/user/avatar-2.jpg') ?>" alt="user-image" class="user-avtar">
+	 						<div class="ml-4">
+	 							<p class="mt-4"><?= $this->session->userdata('username') ?></p>
+	 						</div>
 	 					</a>
 	 					<div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">
 	 						<div class="dropdown-body">

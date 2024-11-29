@@ -37,7 +37,7 @@
 	<style>
 		/* Base font size for the table */
 		#list_jadwal {
-			font-size: 16px;
+			font-size: 14px;
 			/* Default font size */
 		}
 

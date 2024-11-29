@@ -23,64 +23,45 @@
 						<div class="modal-dialog  modal-dialog-scrollable">
 							<div class="modal-content">
 								<div class="modal-header text-white" style="background:#800000">
-									<h1 class="modal-title fs-5" id="exampleModalLabel">Isi Data List Tempat Manggung</h1>
+									<h1 class="modal-title fs-5" id="exampleModalLabel">Isi Data Jadwal Manggung</h1>
 									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 								</div>
 
 								<div class="modal-body">
 									<div class="container">
-										<form method="post" action="<?= base_url('admin/dashboard/simpan_data_panggung') ?>" class="save-form">
+
+										<form method="post" action="<?= base_url('admin/dashboard/simpan_data_jadwal') ?>" class="save-form">
 											<div id="form-container" style="max-height: 800px; overflow-y: auto;">
 												<div class="card mb-3 mt-3">
 													<div class="card-body">
 														<div class="modal-body" style="max-height: 500px; overflow-y: auto;">
-															<!-- Nama Tempat Manggung -->
+															<!-- Pilih Band -->
 															<div class="form-group mb-3">
-																<label for="namaBand1" class="form-label">Nama Tempat Manggung</label>
-																<input type="text" required name="nama_tempat[]" class="form-control" id="namaBand1">
-															</div>
-
-															<!-- Provinsi -->
-															<div class="form-group mb-3">
-																<label for="province1" class="form-label">Provinsi</label>
-																<select class="form-control province" required name="provinsi[]" id="province1" onchange="loadCities()">
-																	<option value="">Provinsi</option>
-																	<!-- Province options will be loaded dynamically -->
+																<label for="namaBand" class="form-label">Pilih Band</label>
+																<select class="form-control" required name="nama_band[]" id="namaBand">
+																	<option selected>Pilih Salah Satu</option>
+																	<?php foreach ($list_band as $band) : ?>
+																		<option value="<?= $band['id_band'] ?>"><?= $band['nama_band'] ?></option>
+																	<?php endforeach; ?>
 																</select>
 															</div>
 
-															<!-- Kota -->
+															<div id="resultCard" class="mt-4"></div>
+
+
+															<!-- Pilih Tempat -->
 															<div class="form-group mb-3">
-																<label for="city1" class="form-label">Kota</label>
-																<select id="city1" name="kota[]" required class="city form-control">
-																	<option value="">Kota</option>
-																	<!-- City options will be loaded dynamically -->
+																<label for="tempatManggung" class="form-label">Pilih Tempat</label>
+																<select class="form-control" required name="tempat_manggung[]" id="tempatManggung">
+																	<option selected>Pilih Salah Satu</option>
+																	<?php foreach ($list_panggung as $panggung) : ?>
+																		<option value="<?= $panggung['id_tempat_manggung'] ?>"><?= $panggung['nama_tempat_manggung'] ?></option>
+																	<?php endforeach; ?>
 																</select>
 															</div>
 
-															<!-- Alamat -->
-															<div class="form-group mb-3">
-																<label for="alamat1" class="form-label">Alamat</label>
-																<input type="text" name="alamat[]" required class="form-control" id="alamat1">
-															</div>
+															<div id="resultCard2" class="mt-4"></div>
 
-															<!-- No Telepon -->
-															<div class="form-group mb-3">
-																<label for="contact1" class="form-label">No Telepon</label>
-																<input type="number" name="contact[]" required class="form-control" id="contact1">
-															</div>
-
-															<!-- ID Band -->
-															<div class="form-group mb-3">
-																<label for="idBand" class="form-label">ID Band</label>
-																<input type="text" required name="id_band[]" class="form-control" id="idBand">
-															</div>
-
-															<!-- ID Tempat Manggung -->
-															<div class="form-group mb-3">
-																<label for="idTempatManggung" class="form-label">ID Tempat Manggung</label>
-																<input type="text" required name="id_tempat_manggung[]" class="form-control" id="idTempatManggung">
-															</div>
 
 															<!-- Tanggal -->
 															<div class="form-group mb-3">
@@ -93,22 +74,18 @@
 																<label for="time" class="form-label">Waktu</label>
 																<input type="time" required name="time[]" class="form-control" id="time">
 															</div>
-
-															<!-- Status -->
-
 														</div>
 													</div>
 												</div>
-											</div>
 
-											<!-- Button untuk menambah form baru -->
-											<button type="button" class="btn btn-success mb-3" id="add-button">+</button>
-
-											<div class="modal-footer">
-												<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
-												<button type="submit" class="btn btn-dark">Simpan</button>
+												<button type="submit" class="btn btn-primary">Simpan</button>
 											</div>
 										</form>
+
+
+
+
+
 
 
 										<script>
@@ -151,7 +128,23 @@
 								<strong>Harap isi data dengan benar!</strong>, karena setelah data terkonfirmasi, data tidak bisa di ubah dan di hapus.
 								<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 							</div>
-							<div class=" table-responsive">
+
+							<?php if ($this->session->flashdata('error')): ?>
+								<div class="alert mt-3 mb-3 alert-danger alert-dismissible fade show" role="alert">
+									<?= $this->session->flashdata('error'); ?>
+									<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+								</div>
+							<?php endif; ?>
+
+							<?php if ($this->session->flashdata('success')): ?>
+								<div class="alert mt-3 mb-3 alert-success alert-dismissible fade show" role="alert">
+									<?= $this->session->flashdata('success'); ?>
+									<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+								</div>
+							<?php endif; ?>
+
+
+							<div class="table table-responsive table-sm">
 								<table id="list_jadwal" class="table table-striped" style="width:100%">
 									<thead>
 										<tr>
@@ -164,6 +157,7 @@
 											<th>Waktu</th>
 											<th>Status</th>
 											<th>Kontak Band</th>
+											<th>Kontak Venue</th>
 											<th>#</th>
 										</tr>
 									</thead>
@@ -250,10 +244,11 @@
 															<!-- End Modal ubah status -->
 
 														</td>
+														<td><?= htmlspecialchars($data['contact_band']); ?></td>
 														<td><?= htmlspecialchars($data['contact']); ?></td>
 														<td>
 
-															<div class="d-flex gap-3">
+															<div class="d-flex gap-1">
 																<form method="post" action="<?= base_url('admin/dashboard/hapus_data_tempat_manggung') ?>" class="delete-form">
 																	<input type="hidden" name="tempat_id[]" value="<?= $data['id_jadwal'] ?>" />
 																	<button type="button" id="delete_button" class="btn btn-danger text-white"><i class="ph ph-trash"></i></button>
@@ -371,7 +366,7 @@
 										<?php endif; ?>
 									</tbody>
 
-									<tfoot>
+									<!-- <tfoot>
 										<tr>
 											<th>No</th>
 											<th>Nama Band</th>
@@ -382,17 +377,20 @@
 											<th>Waktu</th>
 											<th>Status</th>
 											<th>Kontak Band</th>
+											<th>Kontak Venue</th>
 											<th>#</th>
 										</tr>
-									</tfoot>
+									</tfoot> -->
 								</table>
 
 							</div>
+
+
 						</div>
 						<!-- tab jadwal terkonfirmasi -->
 						<div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
 							<div class=" table-responsive">
-								<table id="list_jadwal" class="table table-striped" style="width:100%">
+								<table id="list_jadwal" class="table table-striped mb-5" style="width:100%">
 									<thead>
 										<tr>
 											<th>No</th>
@@ -489,7 +487,7 @@
 															<!-- End Modal ubah status -->
 
 														</td>
-														<td><?= htmlspecialchars($data['contact']); ?></td>
+														<td><?= htmlspecialchars($data['contact_band']); ?></td>
 
 													</tr>
 												<?php } ?>

@@ -91,7 +91,7 @@
 											<td><?= $no++; ?></td>
 											<td><?= htmlspecialchars($band['nama_band']); ?></td>
 											<td><?= htmlspecialchars($band['genre']); ?></td>
-											<td><?= htmlspecialchars($band['contact']); ?></td>
+											<td><?= htmlspecialchars($band['contact_band']); ?></td>
 											<td>
 
 												<div class="d-flex gap-3">
@@ -108,7 +108,7 @@
 														data-id="<?= $band['id_band'] ?>"
 														data-name="<?= htmlspecialchars($band['nama_band']); ?>"
 														data-genre="<?= htmlspecialchars($band['genre']); ?>"
-														data-contact="<?= htmlspecialchars($band['contact']); ?>">
+														data-contact="<?= htmlspecialchars($band['contact_band']); ?>">
 														<i class=" ph ph-pencil"></i>
 													</button>
 

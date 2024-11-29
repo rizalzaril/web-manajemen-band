@@ -100,6 +100,82 @@
 	<?php endif; ?>
 </script>
 
+
+<!-- ONCHANGE band dan panggung -->
+<script>
+	$(document).ready(function() {
+		// Event onchange untuk dropdown namaBand
+		$('#namaBand').change(function() {
+			const bandId = $(this).val();
+			if (bandId) {
+				$.ajax({
+					url: "<?= base_url('admin/dashboard/get_band_details') ?>", // Ganti dengan nama controller/method
+					type: "POST",
+					data: {
+						id_band: bandId
+					},
+					dataType: "json",
+					success: function(data) {
+						if (data) {
+							let cardContent = `
+                                    <div class="card p-3">
+                                        <div class="card-body">
+                                            <h5 class="card-title">${data.nama_band}</h5>
+                                            <p class="card-text">Genre: ${data.genre}</p>
+                                            <p class="card-text">Kontak: ${data.contact_band}</p>
+                                        </div>
+                                    </div>`;
+							$('#resultCard').html(cardContent);
+						} else {
+							$('#resultCard').html('<p>Data tidak ditemukan.</p>');
+						}
+					},
+					error: function() {
+						alert('Gagal mengambil data. Silakan coba lagi.');
+					}
+				});
+			}
+		});
+
+		// Event onchange untuk dropdown tempatManggung
+		$('#tempatManggung').change(function() {
+			const tempatId = $(this).val();
+			if (tempatId) {
+				$.ajax({
+					url: "<?= base_url('admin/dashboard/get_tempat_details') ?>", // Sesuaikan endpoint
+					type: "POST",
+					data: {
+						id_tempat: tempatId
+					},
+					dataType: "json",
+					success: function(data) {
+						if (data) {
+							let cardContent = `
+                        <div class="card">
+                            <div class="card-body p-3">
+                                <h5 class="card-title">${data.nama_tempat_manggung}</h5>
+                                <p class="card-text">Provinsi: ${data.provinsi}</p>
+                                <p class="card-text">Kota: ${data.kota}</p>
+                                <p class="card-text">Alamat: ${data.alamat}</p>
+                                <p class="card-text">Kontak: ${data.contact}</p>
+                            </div>
+                        </div>`;
+							$('#resultCard2').html(cardContent);
+						} else {
+							$('#resultCard2').html('<p>Data tidak ditemukan.</p>');
+						}
+					},
+					error: function() {
+						alert('Gagal mengambil data. Silakan coba lagi.');
+					}
+				});
+			}
+		});
+	});
+</script>
+
+
+
 </body>
 <!-- [Body] end -->
 

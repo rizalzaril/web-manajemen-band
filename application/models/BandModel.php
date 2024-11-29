@@ -39,6 +39,16 @@ class BandModel extends CI_Model
 		}
 	}
 
+	public function getBandNameById($id_band)
+	{
+		$this->db->select('nama_band');
+		$this->db->from('band');
+		$this->db->where('id_band', $id_band);
+		$query = $this->db->get();
+		return $query->row() ? $query->row()->nama_band : 'Unknown Band';
+	}
+
+
 
 	public function updateBand($band_id, $data)
 	{

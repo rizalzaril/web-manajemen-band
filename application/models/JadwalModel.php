@@ -7,8 +7,54 @@ class JadwalModel extends CI_Model
 	// Insert multiple rows into the database
 	public function insertJadwal($data)
 	{
-		$this->db->insert_batch('tempat_manggung', $data); // 'bands' is the table name
+		$this->db->insert_batch('jadwal_manggung', $data); // 'bands' is the table name
 	}
+
+
+	public function checkConflict($band_id, $tempat_id, $date, $time)
+	{
+		$this->db->where('id_band', $band_id);
+		$this->db->where('id_tempat_manggung', $tempat_id);
+		$this->db->where('date', $date);
+		$this->db->where('time', $time);
+		$query = $this->db->get('jadwal_manggung');
+
+		return $query->num_rows() > 0; // Return true if conflict exists
+	}
+
+	public function checkConflictForOtherBands($band_id, $tempat_id, $date, $time)
+	{
+		$this->db->where('id_tempat_manggung', $tempat_id);
+		$this->db->where('date', $date);
+		$this->db->where('time', $time);
+		$this->db->where('id_band !=', $band_id); // Ensure it's not the same band
+		$query = $this->db->get('jadwal_manggung');
+
+		// If another band is scheduled at the same time and place
+		return $query->num_rows() > 0;
+	}
+
+	public function checkDuplicateSchedule($band_id, $tempat_id, $date, $time)
+	{
+		$this->db->where('id_band', $band_id);
+		$this->db->where('id_tempat_manggung', $tempat_id);
+		$this->db->where('date', $date);
+		$this->db->where('time', $time);
+		$query = $this->db->get('jadwal_manggung');
+
+		// If a duplicate schedule exists with the same band, tempat, date, and time
+		return $query->num_rows() > 0;
+	}
+
+	public function getTempatNameById($id_tempat)
+	{
+		$this->db->select('nama_tempat_manggung');
+		$this->db->from('tempat_manggung');
+		$this->db->where('id_tempat_manggung', $id_tempat);
+		$query = $this->db->get();
+		return $query->row() ? $query->row()->nama_tempat_manggung : 'Unknown Tempat';
+	}
+
 
 	public function get_all_jadwal()
 	{

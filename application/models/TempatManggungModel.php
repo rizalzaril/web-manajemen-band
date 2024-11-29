@@ -29,15 +29,76 @@ class TempatManggungModel extends CI_Model
 	}
 
 
-	public function getTempatManggungById($band_id)
+	public function getTempatManggungById($tempat_id)
 	{
-		$this->db->where('id_tempat_manggung', $band_id);  // Assuming the column name is id_band
-		$query = $this->db->get('tempat_manggung'); // 'bands' is the table name
-		if ($query->num_rows() > 0) {
-			return $query->row_array(); // Fetch single row as an associative array
-		} else {
-			return null; // Return null if no record found
+		$tempat = $this->db->get_where('tempat_manggung', ['id_tempat_manggung' => $tempat_id])->row_array();
+
+		if ($tempat) {
+			$tempat['provinsi'] = $this->get_provinsi_name($tempat['provinsi']);
+			$tempat['kota'] = $this->get_kota_name($tempat['kota']);
 		}
+
+		return $tempat;
+	}
+
+
+	// Ambil data provinsi berdasarkan ID
+	private function get_provinsi_name($provinsi_id)
+	{
+		$data = $this->get_cached_data('province');
+
+		foreach ($data['rajaongkir']['results'] as $province) {
+			if ($province['province_id'] == $provinsi_id) {
+				return $province['province'];
+			}
+		}
+		return null;
+	}
+
+	// Ambil data kota berdasarkan ID
+	private function get_kota_name($kota_id)
+	{
+		$data = $this->get_cached_data('city');
+
+		foreach ($data['rajaongkir']['results'] as $city) {
+			if ($city['city_id'] == $kota_id) {
+				return $city['city_name'];
+			}
+		}
+		return null;
+	}
+
+	// Contoh fungsi cache data dari API
+	private function get_cached_data($type)
+	{
+		// Misal data diambil dari file cache atau API RajaOngkir
+		$cache_file = APPPATH . "cache/{$type}_data.json";
+		if (file_exists($cache_file)) {
+			return json_decode(file_get_contents($cache_file), true);
+		}
+		return $this->fetch_data_from_api($type); // Ganti sesuai implementasi API fetch Anda
+	}
+
+	private function fetch_data_from_api($type)
+	{
+		// Contoh fetch dari API RajaOngkir
+		$url = $type == 'province'
+			? 'https://api.rajaongkir.com/starter/province'
+			: 'https://api.rajaongkir.com/starter/city';
+		$api_key = 'fadfcca283fa5c1162a55401d306842f';
+
+		$response = file_get_contents($url, false, stream_context_create([
+			'http' => [
+				'header' => "Key: {$api_key}"
+			]
+		]));
+		$data = json_decode($response, true);
+
+		// Cache data ke file
+		$cache_file = APPPATH . "cache/{$type}_data.json";
+		file_put_contents($cache_file, json_encode($data));
+
+		return $data;
 	}
 
 

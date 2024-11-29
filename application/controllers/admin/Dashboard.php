@@ -87,7 +87,7 @@ class Dashboard extends CI_Controller
 					$data[] = [
 						'nama_band' => $name,
 						'genre' => !empty($genre[$key]) ? $genre[$key] : null, // Default genre to null if empty
-						'contact' => $contact[$key]
+						'contact_band' => $contact[$key]
 					];
 				}
 			}
@@ -152,7 +152,7 @@ class Dashboard extends CI_Controller
 			$data = [
 				'nama_band' => $nama_band,
 				'genre' => $genre,
-				'contact' => $contact
+				'contact_band' => $contact
 			];
 
 			// Load the model
@@ -481,10 +481,12 @@ class Dashboard extends CI_Controller
 		if ($this->session->userdata('id_user_admin') || $this->session->userdata('username')) {
 			$id_user_admin = $this->session->userdata('id_user_admin'); //session
 			// Fetch the list of tempat_manggung from the model
-			$data_jadwal['list_jadwal'] = $this->JadwalModel->get_all_jadwal();
+			$data['list_jadwal'] = $this->JadwalModel->get_all_jadwal();
+			$data['list_band'] = $this->BandModel->get_all_bands();
+			$data['list_panggung'] = $this->TempatManggungModel->get_all_tempat_manggung();
 
 			//Fetch province and city names
-			foreach ($data_jadwal['list_jadwal'] as &$tempat) {
+			foreach ($data['list_jadwal'] as &$tempat) {
 				// Fetch Provinsi Name
 				$tempat['provinsi_name'] = $this->get_provinsi_name($tempat['provinsi']);
 
@@ -496,7 +498,7 @@ class Dashboard extends CI_Controller
 			$this->load->view('admin/layouts/header', $id_user_admin);
 			$this->load->view('admin/layouts/navheader');
 			$this->load->view('admin/layouts/sidebar');
-			$this->load->view('admin/jadwal/listJadwal', $data_jadwal);
+			$this->load->view('admin/jadwal/listJadwal', $data);
 			$this->load->view('admin/layouts/footer');
 		} else {
 			echo "<script>
@@ -504,5 +506,117 @@ class Dashboard extends CI_Controller
 			window.location.href = '" . base_url() . "'
 		</script>"; // Redirect ke halaman login jika tidak ada session
 		}
+	}
+
+
+	// ONCHANGE FORM \\
+	public function get_band_details()
+	{
+		$band_id = $this->input->post('id_band');
+		if ($band_id) {
+			$this->load->model('BandModel'); // Pastikan model dimuat
+			$data = $this->BandModel->getBandById($band_id);
+
+			if ($data) {
+				echo json_encode($data);
+			} else {
+				echo json_encode(['error' => 'Band tidak ditemukan']);
+			}
+		} else {
+			echo json_encode(['error' => 'ID Band tidak valid']);
+		}
+	}
+
+
+	public function get_tempat_details()
+	{
+		$tempat_id = $this->input->post('id_tempat');
+		if ($tempat_id) {
+			$this->load->model('TempatManggungModel'); // Pastikan model dimuat
+			$data = $this->TempatManggungModel->getTempatManggungById($tempat_id);
+
+			if ($data) {
+				echo json_encode($data);
+			} else {
+				echo json_encode(['error' => 'Tempat tidak ditemukan']);
+			}
+		} else {
+			echo json_encode(['error' => 'ID Tempat tidak valid']);
+		}
+	}
+
+
+	// save jadwal \\
+
+
+	public function simpan_data_jadwal()
+	{
+		// Retrieve the data from the form
+		$nama_band = $this->input->post('nama_band'); // Array of band names
+		$tempat_manggung = $this->input->post('tempat_manggung'); // Array of tempat names
+		$date = $this->input->post('date'); // Array of dates
+		$time = $this->input->post('time'); // Array of times
+
+		// Initialize data and error array
+		$data = [];
+		$errors = [];
+
+		if (!empty($nama_band) && !empty($tempat_manggung) && !empty($date) && !empty($time)) {
+			foreach ($nama_band as $key => $band_id) {
+				if (!empty($band_id) && !empty($tempat_manggung[$key]) && !empty($date[$key]) && !empty($time[$key])) {
+					// Get band name and tempat name
+					$band_name = $this->BandModel->getBandNameById($band_id);
+					$tempat_name = $this->JadwalModel->getTempatNameById($tempat_manggung[$key]);
+
+					// Check for conflicts with the same band at the same time and place
+					$is_conflict = $this->JadwalModel->checkConflict($band_id, $tempat_manggung[$key], $date[$key], $time[$key]);
+
+					if ($is_conflict) {
+						// Add error message for this schedule (same band, same time, same place)
+						$errors[] = "Jadwal bentrok: Band '{$band_name}' pada tanggal {$date[$key]} jam {$time[$key]} di tempat '{$tempat_name}' sudah ada.";
+					} else {
+						// Check if another band has the same time slot at the same place
+						$is_time_conflict = $this->JadwalModel->checkConflictForOtherBands($band_id, $tempat_manggung[$key], $date[$key], $time[$key]);
+						if ($is_time_conflict) {
+							// Add error message for conflict with other band at the same time and place
+							$errors[] = "Jadwal bentrok: Band lain sudah terjadwal pada tanggal {$date[$key]} jam {$time[$key]} di tempat '{$tempat_name}'.";
+						} else {
+							// Ensure no other band is scheduled at the same time, date, and place
+							$is_duplicate_schedule = $this->JadwalModel->checkDuplicateSchedule($band_id, $tempat_manggung[$key], $date[$key], $time[$key]);
+							if ($is_duplicate_schedule) {
+								// Add error message for duplicate schedule
+								$errors[] = "Jadwal bentrok: Band '{$band_name}' sudah terjadwal pada tanggal {$date[$key]} jam {$time[$key]} di tempat '{$tempat_name}'.";
+							} else {
+								// Add to data for insertion
+								$data[] = [
+									'id_user_admin' => $this->session->userdata('id_user_admin'),
+									'id_band' => $band_id,
+									'id_tempat_manggung' => $tempat_manggung[$key],
+									'date' => $date[$key],
+									'time' => $time[$key],
+								];
+							}
+						}
+					}
+				}
+			}
+		}
+
+		// If errors exist, set the error message
+		if (!empty($errors)) {
+			// Save the error messages to session
+			$this->session->set_flashdata('error', implode('<br>', $errors));
+		} else if (!empty($data)) {
+			// Save the valid data
+			$this->load->model('JadwalModel'); // Ensure the model is loaded
+			$result = $this->JadwalModel->insertJadwal($data); // Fix: insertJadwal($data) instead of insertJadwal()($data)
+			if ($result) {
+				$this->session->set_flashdata('success', 'Data berhasil disimpan!');
+			} else {
+			}
+		}
+
+		// Redirect to the list of jadwal
+		redirect('/admin/dashboard/list_jadwal');
 	}
 }
