@@ -191,10 +191,12 @@
 
 																<span class="badge text-bg-success"><?= htmlspecialchars($data['status']); ?></span>
 
+															<?php } elseif ($data['status'] == 'Selesai') { ?>
+
+																<span class="badge text-bg-info"><?= htmlspecialchars($data['status']); ?></span>
+
 															<?php } else { ?>
-
 																<span class="badge text-bg-danger"><?= htmlspecialchars($data['status']); ?></span>
-
 															<?php } ?>
 
 															<button type="button" class="badge text-bg-dark mb-3 mt-3" data-bs-toggle="modal" data-bs-target="#ModalStatus"
@@ -452,10 +454,12 @@
 
 																<span class="badge text-bg-success"><?= htmlspecialchars($data['status']); ?></span>
 
+															<?php } elseif ($data['status'] == 'Selesai') { ?>
+
+																<span class="badge text-bg-info"><?= htmlspecialchars($data['status']); ?></span>
+
 															<?php } else { ?>
-
 																<span class="badge text-bg-danger"><?= htmlspecialchars($data['status']); ?></span>
-
 															<?php } ?>
 
 															<button type="button" class="badge text-bg-dark mb-3 mt-3" data-bs-toggle="modal" data-bs-target="#ModalStatus2"
@@ -592,14 +596,16 @@
 
 																<span class="badge text-bg-warning"><?= htmlspecialchars($data['status']); ?></span>
 
-															<?php } elseif ($data['status'] == 'Hadir') { ?>
+															<?php } elseif ($data['status'] == 'Terkonfirmasi') { ?>
 
 																<span class="badge text-bg-success"><?= htmlspecialchars($data['status']); ?></span>
 
+															<?php } elseif ($data['status'] == 'Selesai') { ?>
+
+																<span class="badge text-bg-info"><?= htmlspecialchars($data['status']); ?></span>
+
 															<?php } else { ?>
-
 																<span class="badge text-bg-danger"><?= htmlspecialchars($data['status']); ?></span>
-
 															<?php } ?>
 
 														</td>
@@ -649,7 +655,7 @@
 														<td><?= htmlspecialchars($data['nama_band']); ?></td>
 														<td><?= htmlspecialchars($data['genre']); ?></td>
 														<td><?= htmlspecialchars($data['nama_tempat_manggung']); ?></td>
-														<td><?= htmlspecialchars($data['jenis_konser']); ?></td>
+														<td><?= htmlspecialchars($data['nama_konser']); ?></td>
 														<td><?= htmlspecialchars($data['alamat']); ?>, <?= '', htmlspecialchars($data['kota_name']); ?>, <?= '', htmlspecialchars($data['provinsi_name']); ?> </td>
 														<td><?= htmlspecialchars($data['date']); ?></td>
 														<td><?= htmlspecialchars($data['time']); ?></td>
@@ -658,14 +664,16 @@
 
 																<span class="badge text-bg-warning"><?= htmlspecialchars($data['status']); ?></span>
 
-															<?php } elseif ($data['status'] == 'Hadir') { ?>
+															<?php } elseif ($data['status'] == 'Terkonfirmasi') { ?>
 
 																<span class="badge text-bg-success"><?= htmlspecialchars($data['status']); ?></span>
 
+															<?php } elseif ($data['status'] == 'Selesai') { ?>
+
+																<span class="badge text-bg-info"><?= htmlspecialchars($data['status']); ?></span>
+
 															<?php } else { ?>
-
 																<span class="badge text-bg-danger"><?= htmlspecialchars($data['status']); ?></span>
-
 															<?php } ?>
 
 														</td>

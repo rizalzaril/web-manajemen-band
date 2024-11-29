@@ -45,6 +45,60 @@
 			</div>
 		</div>
 
+
+		<div class="mt-5">
+
+			<div class="card mb-5">
+				<div class="card-body  ">
+					<h5>Recent Jadwal Manggung</h5>
+					<table id="list_jadwal" class="table table-striped table-bordered">
+						<thead>
+							<tr>
+								<th>No</th>
+								<th>Nama Band</th>
+								<th>Tanggal</th>
+								<th>Tempat</th>
+								<th>Alamat</th>
+								<th>Jenis Konser</th>
+								<th>Waktu</th>
+								<th>Status Jadwal</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php $no = 1;
+							foreach ($list_jadwal as $b) : ?>
+								<tr>
+									<td><?= $no++ ?></td>
+									<td><?= $b['nama_band'] ?></td>
+									<td><?= $b['date'] ?></td>
+									<td><?= $b['nama_tempat_manggung'] ?></td>
+									<td><?= $b['alamat'] ?></td>
+									<td><?= $b['nama_konser'] ?></td>
+									<td><?= $b['time'] ?></td>
+									<td>
+										<?php if ($b['status'] == 'Pending') { ?>
+											<span class="badge text-bg-warning"><?= $b['status'] ?></span>
+										<?php } elseif ($b['status'] == 'Terkonfirmasi') { ?>
+											<span class="badge bg-success"><?= $b['status'] ?></span>
+										<?php } elseif ($b['status'] == 'Selesai') { ?>
+											<span class="badge bg-info"><?= $b['status'] ?></span>
+										<?php } else { ?>
+											<span class="badge bg-danger"><?= $b['status'] ?></span>
+										<?php } ?>
+									</td>
+								</tr>
+							<?php endforeach; ?>
+						</tbody>
+					</table>
+
+				</div>
+			</div>
+
+
+
+
+		</div>
+
 	</div>
 	<!-- [ Main Content ] end -->
 </div>
