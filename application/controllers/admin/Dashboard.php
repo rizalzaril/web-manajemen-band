@@ -32,6 +32,9 @@ class Dashboard extends CI_Controller
 			$data['panggung_count'] = $this->TempatManggungModel->get_count_tempat_manggung();
 			$data['jadwal_count'] = $this->JadwalModel->get_count_jadwal();
 			$data['list_jadwal'] = $this->JadwalModel->get_all_jadwal();
+			$data['jadwal_count_hadir'] = $this->JadwalModel->get_count_jadwal_hadir();
+			$data['jadwal_count_pending'] = $this->JadwalModel->get_count_jadwal_pending();
+			$data['jadwal_count_batal_hadir'] = $this->JadwalModel->get_count_jadwal_batal_hadir();
 			$this->load->view('admin/layouts/header', $id_user_admin);
 			$this->load->view('admin/layouts/navheader');
 			$this->load->view('admin/layouts/sidebar');
@@ -46,6 +49,132 @@ class Dashboard extends CI_Controller
 	}
 
 	// ********************* BAND DATA CRUD FUCNTION *********************** \\
+
+
+
+	public function view_band_hadir()
+	{
+		if ($this->session->userdata('id_user_admin') || $this->session->userdata('username')) {
+
+			$id_user_admin = $this->session->userdata('id_user_admin'); //session
+			$data['band_hadir'] = $this->JadwalModel->get_all_jadwal();
+			foreach ($data['band_hadir'] as &$tempat) {
+				// Fetch Provinsi Name
+				$tempat['provinsi_name'] = $this->get_provinsi_name($tempat['provinsi']);
+
+				// Fetch Kota Name
+				$tempat['kota_name'] = $this->get_kota_name($tempat['kota']);
+			}
+			$this->load->view('admin/layouts/header', $id_user_admin);
+			$this->load->view('admin/layouts/navheader');
+			$this->load->view('admin/layouts/sidebar');
+			$this->load->view('admin/band/bandHadir', $data);
+			$this->load->view('admin/layouts/footer');
+		} else {
+			echo "<script>
+			alert('Anda harus Login untuk akses halaman ini!.');
+			window.location.href = '" . base_url() . "'
+		</script>"; // Redirect ke halaman login jika tidak ada session
+		}
+	}
+
+	public function view_band_batal_hadir()
+	{
+		if ($this->session->userdata('id_user_admin') || $this->session->userdata('username')) {
+
+			$id_user_admin = $this->session->userdata('id_user_admin'); //session
+			$data['band_batal_hadir'] = $this->JadwalModel->get_all_jadwal();
+			foreach ($data['band_batal_hadir'] as &$tempat) {
+				// Fetch Provinsi Name
+				$tempat['provinsi_name'] = $this->get_provinsi_name($tempat['provinsi']);
+
+				// Fetch Kota Name
+				$tempat['kota_name'] = $this->get_kota_name($tempat['kota']);
+			}
+			$this->load->view('admin/layouts/header', $id_user_admin);
+			$this->load->view('admin/layouts/navheader');
+			$this->load->view('admin/layouts/sidebar');
+			$this->load->view('admin/band/bandTidakHadir', $data);
+			$this->load->view('admin/layouts/footer');
+		} else {
+			echo "<script>
+			alert('Anda harus Login untuk akses halaman ini!.');
+			window.location.href = '" . base_url() . "'
+		</script>"; // Redirect ke halaman login jika tidak ada session
+		}
+	}
+
+
+
+	public function view_band_pending()
+	{
+		if ($this->session->userdata('id_user_admin') || $this->session->userdata('username')) {
+
+			$id_user_admin = $this->session->userdata('id_user_admin'); //session
+			$data['band_pending'] = $this->JadwalModel->get_all_jadwal();
+			foreach ($data['band_pending'] as &$tempat) {
+				// Fetch Provinsi Name
+				$tempat['provinsi_name'] = $this->get_provinsi_name($tempat['provinsi']);
+
+				// Fetch Kota Name
+				$tempat['kota_name'] = $this->get_kota_name($tempat['kota']);
+			}
+			$this->load->view('admin/layouts/header', $id_user_admin);
+			$this->load->view('admin/layouts/navheader');
+			$this->load->view('admin/layouts/sidebar');
+			$this->load->view('admin/band/bandPending', $data);
+			$this->load->view('admin/layouts/footer');
+		} else {
+			echo "<script>
+			alert('Anda harus Login untuk akses halaman ini!.');
+			window.location.href = '" . base_url() . "'
+		</script>"; // Redirect ke halaman login jika tidak ada session
+		}
+	}
+
+	public function view_report()
+	{
+		if ($this->session->userdata('id_user_admin') || $this->session->userdata('username')) {
+
+
+			// Get distinct months, years, and dates
+			$months = $this->JadwalModel->get_distinct_months();
+			$years = $this->JadwalModel->get_distinct_years();
+			$dates = $this->JadwalModel->get_distinct_dates();
+
+			// Pass the data to the view
+			$data = [
+				'months' => $months,
+				'years'  => $years,
+				'dates'  => $dates
+			];
+
+
+			$id_user_admin = $this->session->userdata('id_user_admin'); //session
+			$data['report_data'] = $this->JadwalModel->get_all_jadwal();
+			foreach ($data['report_data'] as &$tempat) {
+				// Fetch Provinsi Name
+				$tempat['provinsi_name'] = $this->get_provinsi_name($tempat['provinsi']);
+
+				// Fetch Kota Name
+				$tempat['kota_name'] = $this->get_kota_name($tempat['kota']);
+			}
+			$this->load->view('admin/layouts/header', $id_user_admin);
+			$this->load->view('admin/layouts/navheader');
+			$this->load->view('admin/layouts/sidebar');
+			$this->load->view('admin/report/report', $data);
+			$this->load->view('admin/layouts/footer');
+		} else {
+			echo "<script>
+			alert('Anda harus Login untuk akses halaman ini!.');
+			window.location.href = '" . base_url() . "'
+		</script>"; // Redirect ke halaman login jika tidak ada session
+		}
+	}
+
+
+
+
 
 	public function list_band()
 	{
@@ -71,6 +200,8 @@ class Dashboard extends CI_Controller
 		</script>"; // Redirect ke halaman login jika tidak ada session
 		}
 	}
+
+
 
 
 	public function simpan_data_band()

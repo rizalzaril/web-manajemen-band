@@ -75,6 +75,35 @@ class JadwalModel extends CI_Model
 		}
 	}
 
+
+	public function get_jadwal_hadir()
+	{
+		// Mengambil semua data dari tabel 'jadwal_manggung' dengan join
+		$query = $this->db->select('*')
+			->from('jadwal_manggung')
+			->join('band', 'band.id_band = jadwal_manggung.id_band')
+			->join('tempat_manggung', 'tempat_manggung.id_tempat_manggung = jadwal_manggung.id_tempat_manggung')
+			->join('user_admin', 'user_admin.id_user_admin = jadwal_manggung.id_user_admin')
+			->join('jenis_konser', 'jenis_konser.id_jenis_konser = jadwal_manggung.id_jenis_konser')
+			->order_by('jadwal_manggung.id_jadwal', 'DESC')
+			->get();
+
+		// Menghitung jumlah jadwal dengan status 'Terkonfirmasi'
+		$count_confirmed = $this->db->where('status', 'Terkonfirmasi')
+			->from('jadwal_manggung')
+			->count_all_results();
+
+		if (!$query) {
+			echo ("<script>alert('data kosong')</script>");
+		} else {
+			return [
+				'jadwal' => $query->result_array(), // Mengembalikan hasil dalam bentuk array
+				'total_terkonfirmasi' => $count_confirmed // Jumlah data dengan status 'Terkonfirmasi'
+			];
+		}
+	}
+
+
 	public function get_all_konser()
 	{
 		// Mengambil semua data dari tabel 'band' dan mengurutkan berdasarkan 'id_band' secara menurun (DESC)
@@ -94,6 +123,26 @@ class JadwalModel extends CI_Model
 	{
 		return $this->db->count_all('jadwal_manggung');
 	}
+
+
+	public function get_count_jadwal_pending()
+	{
+		$this->db->where('status', 'Pending'); // Kondisi untuk status Terkonfirmasi
+		return $this->db->count_all_results('jadwal_manggung'); // Hitung hasil dengan kondisi
+	}
+
+	public function get_count_jadwal_hadir()
+	{
+		$this->db->where('status', 'Terkonfirmasi'); // Kondisi untuk status Terkonfirmasi
+		return $this->db->count_all_results('jadwal_manggung'); // Hitung hasil dengan kondisi
+	}
+
+	public function get_count_jadwal_batal_hadir()
+	{
+		$this->db->where('status', 'Terkonfirmasi'); // Kondisi untuk status Terkonfirmasi
+		return $this->db->count_all_results('jadwal_manggung'); // Hitung hasil dengan kondisi
+	}
+
 
 
 	public function getJadwalById($jadwal_id)
@@ -130,5 +179,33 @@ class JadwalModel extends CI_Model
 			return $this->db->delete('jadwal_manggung');
 		}
 		return false;
+	}
+
+
+
+	// filter report \\
+
+	// Fetch distinct months from jadwal_manggung table
+	public function get_distinct_months()
+	{
+		$this->db->select('DISTINCT MONTH(date) AS month');
+		$query = $this->db->get('jadwal_manggung');
+		return $query->result();
+	}
+
+	// Fetch distinct years from jadwal_manggung table
+	public function get_distinct_years()
+	{
+		$this->db->select('DISTINCT YEAR(date) AS year');
+		$query = $this->db->get('jadwal_manggung');
+		return $query->result();
+	}
+
+	// Fetch distinct dates from jadwal_manggung table
+	public function get_distinct_dates()
+	{
+		$this->db->select('DISTINCT DATE(date) AS date');
+		$query = $this->db->get('jadwal_manggung');
+		return $query->result();
 	}
 }

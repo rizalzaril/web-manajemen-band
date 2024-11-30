@@ -15,6 +15,41 @@
 			</div>
 
 			<div class="col-md-4 ">
+				<a href="<?= base_url('admin/dashboard/view_band_pending') ?>" style="text-decoration:none">
+					<div class="card bg-brand-color-8 order-card mt-3">
+						<div class="card-body">
+							<h6 class="text-white">Butuh Konfirmasi</h6>
+							<h2 class="text-end text-white"><i class="feather icon-alert-circle float-start"></i><?php echo $jadwal_count_pending > 0 ? $jadwal_count_pending : '<p>Belum ada data</p>'; ?></span>
+							</h2>
+						</div>
+					</div>
+				</a>
+
+				<a href="<?= base_url('admin/dashboard/view_band_hadir') ?>" style="text-decoration:none">
+					<div class="card bg-brand-color-10 order-card mt-3">
+						<div class="card-body">
+							<h6 class="text-white">Daftar Hadir</h6>
+							<h2 class="text-end text-white"><i class="feather icon-user-check float-start"></i><?php echo $jadwal_count_hadir > 0 ? $jadwal_count_hadir : '<p>Belum ada data</p>'; ?></span>
+							</h2>
+						</div>
+					</div>
+				</a>
+
+				<a href="<?= base_url('admin/dashboard/view_band_batal_hadir') ?>" style="text-decoration:none">
+					<div class="card bg-dark order-card mt-3">
+						<div class="card-body">
+							<h6 class="text-white">Daftar Batal Hadir</h6>
+							<h2 class="text-end text-white"><i class="feather icon-user-x float-start"></i><?php echo $jadwal_count_batal_hadir > 0 ? $jadwal_count_batal_hadir : '<p>Belum ada data</p>'; ?></span>
+							</h2>
+						</div>
+					</div>
+				</a>
+
+			</div>
+		</div>
+
+		<!-- <div class="row">
+			<div class="col-md-4">
 				<div class="card bg-brand-color-10 order-card">
 					<div class="card-body">
 						<h6 class="text-white">Jumlah List Jadwal</h6>
@@ -22,10 +57,10 @@
 						</h2>
 					</div>
 				</div>
-
-
+			</div>
+			<div class="col-md-4">
 				<a href="<?= base_url('admin/dashboard/list_band') ?>" style="text-decoration:none">
-					<div class="card bg-brand-color-12 order-card">
+					<div class="card bg-brand-color-12 order-card mt-3">
 						<div class="card-body">
 							<h6 class="text-white">Jumlah List Band</h6>
 							<h2 class="text-end text-white"><i class="feather icon-file float-start"></i><span><?php echo $band_count > 0 ? $band_count : 'Belum ada data'; ?></span>
@@ -33,6 +68,8 @@
 						</div>
 					</div>
 				</a>
+			</div>
+			<div class="col-md-4">
 				<a href="<?= base_url('admin/dashboard/list_tempat_manggung') ?>" style="text-decoration:none">
 					<div class="card bg-brand-color-11 order-card">
 						<div class="card-body">
@@ -43,7 +80,7 @@
 					</div>
 				</a>
 			</div>
-		</div>
+		</div> -->
 
 
 		<div class="mt-5">
@@ -93,11 +130,11 @@
 
 				</div>
 			</div>
-
-
-
-
 		</div>
+
+
+
+
 
 	</div>
 	<!-- [ Main Content ] end -->

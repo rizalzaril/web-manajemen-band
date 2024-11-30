@@ -27,7 +27,7 @@
 				<li class="pc-item">
 					<a href="<?= base_url('admin/Dashboard/list_jadwal') ?>" class="pc-link">
 						<span class="pc-micon"><i class="ph ph-clipboard"></i></span>
-						<span class="pc-mtext">Master Jadwal</span>
+						<span class="pc-mtext">Atur Jadwal</span>
 					</a>
 				</li>
 
@@ -41,7 +41,14 @@
 				<li class="pc-item">
 					<a href="<?= base_url('admin/Dashboard/list_tempat_manggung') ?>" class="pc-link">
 						<span class="pc-micon"><i class="ph ph-gear"></i></span>
-						<span class="pc-mtext">Setting Tempat</span>
+						<span class="pc-mtext">Atur Tempat</span>
+					</a>
+				</li>
+
+				<li class="pc-item">
+					<a href="<?= base_url('admin/Dashboard/view_report') ?>" class="pc-link">
+						<span class="pc-micon"><i class="ph ph-file"></i></span>
+						<span class="pc-mtext">Data Report</span>
 					</a>
 				</li>
 

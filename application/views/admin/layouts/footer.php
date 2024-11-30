@@ -21,6 +21,15 @@
 <script src="<?= base_url('./assets/js/plugins/bootstrap.bundle.min.js'); ?>"></script>
 <script src="<?= base_url('./assets/js/plugins/dataTables.js'); ?>"></script>
 <script src="<?= base_url('./assets/js/plugins/dataTables.bootstrap5.js'); ?>"></script>
+<!-- DataTables Buttons plugin -->
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+
+<!-- JSZip for Excel export -->
+<script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+
+<!-- pdfMake for PDF export -->
+<script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.min.js"></script>
 <script src="<?= base_url('./assets/js/formCount.js'); ?>"></script>
 <script src="<?= base_url('./assets/js/genre.js'); ?>"></script>
 <!-- Include SweetAlert2 CSS and JS -->
@@ -30,6 +39,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
+
 
 <script>
 	// Select all table elements
@@ -174,7 +185,36 @@
 	});
 </script>
 
+<script>
+	$(document).ready(function() {
+		// Initialize DataTable
+		var table = $('#list_jadwal').DataTable();
 
+		// Custom filter by Month
+		$('#monthFilter').on('change', function() {
+			var month = $(this).val();
+			table.column(6).search(month ? '^' + month : '', true, false).draw();
+		});
+
+		// Custom filter by Year
+		$('#yearFilter').on('change', function() {
+			var year = $(this).val();
+			table.column(6).search(year ? '^' + year : '', true, false).draw();
+		});
+
+		// Custom filter by Date
+		$('#dateFilter').on('change', function() {
+			var date = $(this).val();
+			table.column(6).search(date ? '^' + date : '', true, false).draw();
+		});
+
+		// Custom filter by Status
+		$('#statusFilter').on('change', function() {
+			var status = $(this).val();
+			table.column(8).search(status ? '^' + status : '', true, false).draw();
+		});
+	});
+</script>
 
 </body>
 <!-- [Body] end -->
