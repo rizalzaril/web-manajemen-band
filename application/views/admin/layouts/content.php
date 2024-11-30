@@ -1,3 +1,86 @@
+<style>
+	.calendar {
+		margin: 20px auto;
+		max-width: 800px;
+	}
+
+	.calendar-header {
+		display: flex;
+		justify-content: space-between;
+		padding: 10px;
+		background-color: #f8f9fa;
+	}
+
+	.calendar-header h3 {
+		margin: 0;
+	}
+
+	.calendar-days {
+		display: grid;
+		grid-template-columns: repeat(7, 1fr);
+		background-color: #f1f1f1;
+		padding: 10px 0;
+	}
+
+	.calendar-days div {
+		text-align: center;
+		font-weight: bold;
+		padding: 10px;
+		background-color: #e9ecef;
+	}
+
+	.calendar-dates {
+		display: grid;
+		grid-template-columns: repeat(7, 1fr);
+	}
+
+	.calendar-dates div {
+		text-align: center;
+		padding: 10px;
+		cursor: pointer;
+	}
+
+	.calendar-dates div:hover {
+		background-color: #e9ecef;
+	}
+
+	.empty {
+		background-color: transparent;
+	}
+
+	.today {
+		background-color: #4caf50;
+		color: white;
+	}
+
+	/* Activities Section */
+	.activities {
+		background-color: #f8f9fa;
+		padding: 10px;
+		margin-top: 10px;
+	}
+
+	.activity-list {
+		list-style-type: none;
+		padding-left: 0;
+	}
+
+	.activity-list li {
+		background-color: #e9ecef;
+		padding: 5px;
+		margin-bottom: 5px;
+		border-radius: 5px;
+	}
+</style>
+
+
+
+
+
+
+
+
+
 <!-- [ Main Content ] start -->
 <div class="pc-container">
 	<div class="pc-content">
@@ -83,6 +166,36 @@
 		</div> -->
 
 
+		<div class="calendar">
+			<!-- Calendar Header -->
+			<div class="calendar-header">
+				<button class="btn btn-outline-secondary" onclick="navigateWeek(-1)">Prev</button>
+				<h3 id="week-title"></h3>
+				<button class="btn btn-outline-secondary" onclick="navigateWeek(1)">Next</button>
+			</div>
+
+			<!-- Calendar Days (Weekdays) -->
+			<div class="calendar-days">
+				<div>Sun</div>
+				<div>Mon</div>
+				<div>Tue</div>
+				<div>Wed</div>
+				<div>Thu</div>
+				<div>Fri</div>
+				<div>Sat</div>
+			</div>
+
+			<!-- Calendar Dates (Dynamic) -->
+			<div class="calendar-dates" id="calendar-dates"></div>
+
+			<!-- Activities Section (Display All Activities for the Week) -->
+			<div class="activities" id="activities">
+				<h5>Jadwal band of the week</h5>
+				<ul id="activity-list" class="activity-list"></ul>
+			</div>
+		</div>
+
+
 		<div class="mt-5">
 
 			<div class="card mb-5">
@@ -141,3 +254,161 @@
 </div>
 </div>
 <!-- [ Main Content ] end -->
+<!-- 
+<script>
+	let currentDate = new Date();
+
+	// Example activities for the current week
+	const activitiesData = {
+		"2024-11-24": ["Attend team meeting", "Write reports"],
+		"2024-11-25": ["Doctor's appointment", "Work on project"],
+		"2024-11-26": ["Yoga session", "Conference call"],
+		"2024-11-27": ["Submit assignments", "Family dinner"],
+		"2024-11-28": ["Review tasks", "Attend webinar"],
+		"2024-11-29": ["Weekend trip", "Catch up with friends"],
+		"2024-11-30": ["Weekend hike", "Watch movie"],
+		"2024-11-17": ["Old activity", "Past event"]
+	};
+
+	// Function to get the start of the week (Sunday)
+	function getStartOfWeek(date) {
+		let day = date.getDay(),
+			diff = date.getDate() - day; // Adjust to Sunday
+		return new Date(date.setDate(diff));
+	}
+
+	// Function to get the end of the week (Saturday)
+	function getEndOfWeek(date) {
+		let day = date.getDay(),
+			diff = date.getDate() + (6 - day); // Adjust to Saturday
+		return new Date(date.setDate(diff));
+	}
+
+	// Function to display the current week
+	function displayWeek(weekStartDate) {
+		let calendarDatesDiv = document.getElementById('calendar-dates');
+		let weekTitle = document.getElementById('week-title');
+		let activityList = document.getElementById('activity-list');
+
+		// Clear the existing dates and activities
+		calendarDatesDiv.innerHTML = '';
+		activityList.innerHTML = '';
+
+		let startOfWeek = new Date(weekStartDate);
+		let endOfWeek = getEndOfWeek(new Date(startOfWeek));
+		weekTitle.textContent = `${startOfWeek.toLocaleDateString()} - ${endOfWeek.toLocaleDateString()}`;
+
+		// Generate calendar dates and display activities for the week
+		for (let i = 0; i < 7; i++) {
+			let currentDay = new Date(startOfWeek);
+			currentDay.setDate(startOfWeek.getDate() + i);
+
+			let dayDiv = document.createElement('div');
+			dayDiv.textContent = currentDay.getDate();
+			dayDiv.dataset.date = currentDay.toISOString().split('T')[0]; // Store date in ISO format
+
+			// Highlight today's date
+			if (currentDay.toDateString() === new Date().toDateString()) {
+				dayDiv.classList.add('today');
+			}
+
+			calendarDatesDiv.appendChild(dayDiv);
+
+			// Display activities for each day of the week if they belong to the current week
+			let dateString = currentDay.toISOString().split('T')[0];
+			if (activitiesData[dateString]) {
+				activitiesData[dateString].forEach(activity => {
+					let li = document.createElement('li');
+					li.textContent = `Day ${currentDay.getDate()} - ${activity}`;
+					activityList.appendChild(li);
+				});
+			}
+		}
+	}
+
+	// Navigate to the previous or next week
+	function navigateWeek(offset) {
+		currentDate.setDate(currentDate.getDate() + offset * 7);
+		let startOfWeek = getStartOfWeek(new Date(currentDate));
+		displayWeek(startOfWeek);
+	}
+
+	// Display the current week when the page loads
+	displayWeek(getStartOfWeek(new Date()));
+</script> -->
+
+
+
+<script>
+	let currentDate = new Date();
+
+	// Example activities for the current week (from PHP data)
+	const activitiesData = <?= json_encode($jadwal); ?>;
+
+	// Function to get the start of the week (Sunday)
+	function getStartOfWeek(date) {
+		let day = date.getDay(),
+			diff = date.getDate() - day; // Adjust to Sunday
+		return new Date(date.setDate(diff));
+	}
+
+	// Function to get the end of the week (Saturday)
+	function getEndOfWeek(date) {
+		let day = date.getDay(),
+			diff = date.getDate() + (6 - day); // Adjust to Saturday
+		return new Date(date.setDate(diff));
+	}
+
+	// Function to display the current week
+	function displayWeek(weekStartDate) {
+		let calendarDatesDiv = document.getElementById('calendar-dates');
+		let weekTitle = document.getElementById('week-title');
+		let activityList = document.getElementById('activity-list');
+
+		// Clear the existing dates and activities
+		calendarDatesDiv.innerHTML = '';
+		activityList.innerHTML = '';
+
+		let startOfWeek = new Date(weekStartDate);
+		let endOfWeek = getEndOfWeek(new Date(startOfWeek));
+		weekTitle.textContent = `${startOfWeek.toLocaleDateString()} - ${endOfWeek.toLocaleDateString()}`;
+
+		// Generate calendar dates and display activities for the week
+		for (let i = 0; i < 7; i++) {
+			let currentDay = new Date(startOfWeek);
+			currentDay.setDate(startOfWeek.getDate() + i);
+
+			let dayDiv = document.createElement('div');
+			dayDiv.textContent = currentDay.getDate();
+			dayDiv.dataset.date = currentDay.toISOString().split('T')[0]; // Store date in ISO format
+
+			// Highlight today's date
+			if (currentDay.toDateString() === new Date().toDateString()) {
+				dayDiv.classList.add('today');
+			}
+
+			calendarDatesDiv.appendChild(dayDiv);
+
+			// Check if there's any activity for this day
+			let dateString = currentDay.toISOString().split('T')[0];
+			let activitiesForDay = activitiesData.filter(activity => activity.date === dateString);
+
+			// Display activities for the current day with date
+			activitiesForDay.forEach(activity => {
+				let li = document.createElement('li');
+				li.textContent = `Tanggal: ${currentDay.toLocaleDateString()} - Band: ${activity.nama_band}, Konser: ${activity.nama_konser} at ${activity.nama_tempat_manggung}`;
+				activityList.appendChild(li);
+			});
+		}
+	}
+
+	// Navigate to the previous or next week
+	function navigateWeek(offset) {
+		currentDate.setDate(currentDate.getDate() + offset * 7);
+		let startOfWeek = getStartOfWeek(new Date(currentDate));
+		displayWeek(startOfWeek);
+	}
+
+	// Display the current week when the page loads
+	displayWeek(getStartOfWeek(new Date()));
+</script>

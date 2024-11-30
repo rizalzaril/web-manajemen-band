@@ -26,8 +26,9 @@ class Dashboard extends CI_Controller
 	public function index()
 	{
 		if ($this->session->userdata('id_user_admin') || $this->session->userdata('username')) {
-			$id_user_admin = $this->session->userdata('id_user_admin'); //session
+			$id_user_admin = $this->session->userdata('id_user_admin'); // Session
 
+			// Data utama untuk dashboard
 			$data['band_count'] = $this->BandModel->get_band_count();
 			$data['panggung_count'] = $this->TempatManggungModel->get_count_tempat_manggung();
 			$data['jadwal_count'] = $this->JadwalModel->get_count_jadwal();
@@ -35,6 +36,11 @@ class Dashboard extends CI_Controller
 			$data['jadwal_count_hadir'] = $this->JadwalModel->get_count_jadwal_hadir();
 			$data['jadwal_count_pending'] = $this->JadwalModel->get_count_jadwal_pending();
 			$data['jadwal_count_batal_hadir'] = $this->JadwalModel->get_count_jadwal_batal_hadir();
+			$data['jadwal'] = $this->JadwalModel->get_all_jadwal_weekly();
+
+			// Ambil data jadwal untuk minggu ini
+
+			// Load semua view dengan data
 			$this->load->view('admin/layouts/header', $id_user_admin);
 			$this->load->view('admin/layouts/navheader');
 			$this->load->view('admin/layouts/sidebar');
@@ -42,9 +48,9 @@ class Dashboard extends CI_Controller
 			$this->load->view('admin/layouts/footer');
 		} else {
 			echo "<script>
-			alert('Anda harus Login untuk akses halaman ini!.');
-			window.location.href = '" . base_url() . "'
-		</script>"; // Redirect ke halaman login jika tidak ada session
+            alert('Anda harus Login untuk akses halaman ini!');
+            window.location.href = '" . base_url() . "';
+        </script>";
 		}
 	}
 

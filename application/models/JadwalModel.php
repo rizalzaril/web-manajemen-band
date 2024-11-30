@@ -118,6 +118,27 @@ class JadwalModel extends CI_Model
 	}
 
 
+	public function get_all_jadwal_weekly()
+	{
+		$start_of_week = date('Y-m-d', strtotime('monday this week')); // Awal minggu
+		$end_of_week = date('Y-m-d', strtotime('sunday this week')); // Akhir minggu
+
+		$query = $this->db->select('jadwal_manggung.*, band.nama_band, tempat_manggung.nama_tempat_manggung, 
+                                tempat_manggung.alamat, user_admin.username, jenis_konser.nama_konser')
+			->from('jadwal_manggung')
+			->join('band', 'band.id_band = jadwal_manggung.id_band')
+			->join('tempat_manggung', 'tempat_manggung.id_tempat_manggung = jadwal_manggung.id_tempat_manggung')
+			->join('user_admin', 'user_admin.id_user_admin = jadwal_manggung.id_user_admin')
+			->join('jenis_konser', 'jenis_konser.id_jenis_konser = jadwal_manggung.id_jenis_konser')
+			->where('jadwal_manggung.date >=', $start_of_week) // Filter awal minggu
+			->where('jadwal_manggung.date <=', $end_of_week) // Filter akhir minggu
+			->order_by('jadwal_manggung.id_jadwal', 'DESC') // Urutkan secara descending
+			->get();
+
+		return $query->result_array(); // Kembalikan hasil dalam bentuk array
+	}
+
+
 
 	public function get_count_jadwal()
 	{

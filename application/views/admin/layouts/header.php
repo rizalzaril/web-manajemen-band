@@ -33,6 +33,7 @@
 	<link rel="stylesheet" href="<?= base_url('./assets/css/style-preset.css'); ?>">
 	<link rel="stylesheet" href="<?= base_url('./assets/css/plugins/bootstrap.min.css'); ?>">
 	<link rel="stylesheet" href="<?= base_url('./assets/css/plugins/datatable.css'); ?>">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-calendar/dist/css/bootstrap-calendar.min.css">
 
 	<style>
 		/* Base font size for the table */

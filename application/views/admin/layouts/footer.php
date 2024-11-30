@@ -1,8 +1,9 @@
 <footer class="pc-footer">
 	<div class="footer-wrapper container-fluid">
-
+		<!-- Footer content can be added here -->
 	</div>
 </footer>
+
 <!-- [Page Specific JS] start -->
 <script src="<?= base_url('./assets/js/plugins/apexcharts.min.js'); ?>"></script>
 <script src="<?= base_url('./assets/js/plugins/jsvectormap.min.js'); ?>"></script>
@@ -10,6 +11,7 @@
 <script src="<?= base_url('./assets/js/plugins/world-merc.js'); ?>"></script>
 <script src="<?= base_url('./assets/js/pages/dashboard-sales.js'); ?>"></script>
 <!-- [Page Specific JS] end -->
+
 <!-- Required Js -->
 <script src="<?= base_url('./assets/js/plugins/popper.min.js'); ?>"></script>
 <script src="<?= base_url('./assets/js/plugins/simplebar.min.js'); ?>"></script>
@@ -21,6 +23,7 @@
 <script src="<?= base_url('./assets/js/plugins/bootstrap.bundle.min.js'); ?>"></script>
 <script src="<?= base_url('./assets/js/plugins/dataTables.js'); ?>"></script>
 <script src="<?= base_url('./assets/js/plugins/dataTables.bootstrap5.js'); ?>"></script>
+
 <!-- DataTables Buttons plugin -->
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
 
@@ -30,17 +33,17 @@
 <!-- pdfMake for PDF export -->
 <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.min.js"></script>
+
 <script src="<?= base_url('./assets/js/formCount.js'); ?>"></script>
 <script src="<?= base_url('./assets/js/genre.js'); ?>"></script>
+
 <!-- Include SweetAlert2 CSS and JS -->
 <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.js"></script>
 
-
+<!-- Bootstrap and Popper.js CDN -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
-
-
 
 <script>
 	// Select all table elements
@@ -50,46 +53,15 @@
 	});
 </script>
 
-
 <script>
 	layout_change('light');
-</script>
-
-
-
-
-<script>
 	layout_sidebar_change('light');
-</script>
-
-
-
-<script>
 	change_box_container('false');
-</script>
-
-
-<script>
 	layout_caption_change('true');
-</script>
-
-
-
-
-<script>
 	layout_rtl_change('false');
-</script>
-
-
-<script>
 	preset_change("preset-1");
-</script>
-
-
-<script>
 	header_change("header-1");
 </script>
-
 
 <script>
 	<?php if ($this->session->flashdata('success')): ?>
@@ -111,7 +83,6 @@
 	<?php endif; ?>
 </script>
 
-
 <!-- ONCHANGE band dan panggung -->
 <script>
 	$(document).ready(function() {
@@ -120,7 +91,7 @@
 			const bandId = $(this).val();
 			if (bandId) {
 				$.ajax({
-					url: "<?= base_url('admin/dashboard/get_band_details') ?>", // Ganti dengan nama controller/method
+					url: "<?= base_url('admin/dashboard/get_band_details') ?>",
 					type: "POST",
 					data: {
 						id_band: bandId
@@ -129,13 +100,13 @@
 					success: function(data) {
 						if (data) {
 							let cardContent = `
-                                    <div class="card p-3">
-                                        <div class="card-body">
-                                            <h5 class="card-title">${data.nama_band}</h5>
-                                            <p class="card-text">Genre: ${data.genre}</p>
-                                            <p class="card-text">Kontak: ${data.contact_band}</p>
-                                        </div>
-                                    </div>`;
+                <div class="card p-3">
+                  <div class="card-body">
+                    <h5 class="card-title">${data.nama_band}</h5>
+                    <p class="card-text">Genre: ${data.genre}</p>
+                    <p class="card-text">Kontak: ${data.contact_band}</p>
+                  </div>
+                </div>`;
 							$('#resultCard').html(cardContent);
 						} else {
 							$('#resultCard').html('<p>Data tidak ditemukan.</p>');
@@ -153,7 +124,7 @@
 			const tempatId = $(this).val();
 			if (tempatId) {
 				$.ajax({
-					url: "<?= base_url('admin/dashboard/get_tempat_details') ?>", // Sesuaikan endpoint
+					url: "<?= base_url('admin/dashboard/get_tempat_details') ?>",
 					type: "POST",
 					data: {
 						id_tempat: tempatId
@@ -162,15 +133,15 @@
 					success: function(data) {
 						if (data) {
 							let cardContent = `
-                        <div class="card">
-                            <div class="card-body p-3">
-                                <h5 class="card-title">${data.nama_tempat_manggung}</h5>
-                                <p class="card-text">Provinsi: ${data.provinsi}</p>
-                                <p class="card-text">Kota: ${data.kota}</p>
-                                <p class="card-text">Alamat: ${data.alamat}</p>
-                                <p class="card-text">Kontak: ${data.contact}</p>
-                            </div>
-                        </div>`;
+                <div class="card">
+                  <div class="card-body p-3">
+                    <h5 class="card-title">${data.nama_tempat_manggung}</h5>
+                    <p class="card-text">Provinsi: ${data.provinsi}</p>
+                    <p class="card-text">Kota: ${data.kota}</p>
+                    <p class="card-text">Alamat: ${data.alamat}</p>
+                    <p class="card-text">Kontak: ${data.contact}</p>
+                  </div>
+                </div>`;
 							$('#resultCard2').html(cardContent);
 						} else {
 							$('#resultCard2').html('<p>Data tidak ditemukan.</p>');
@@ -216,7 +187,40 @@
 	});
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-calendar/dist/js/bootstrap-calendar.min.js"></script>
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		var calendarEl = document.getElementById('calendar');
+
+		// Menyiapkan data untuk event
+		var events = <?php echo json_encode(array_map(function ($jadwal) {
+										return [
+											'title' => $jadwal['nama_band'] . ' - ' . $jadwal['nama_konser'],
+											'start' => $jadwal['date'] . 'T' . $jadwal['time'],
+											'description' => $jadwal['nama_tempat_manggung'] . ', ' . $jadwal['alamat'],
+											'backgroundColor' => $jadwal['status'] === 'Pending' ? '#ffc107' : ($jadwal['status'] === 'Terkonfirmasi' ? '#28a745' : '#17a2b8')
+										];
+									}, $weekly_jadwal)); ?>;
+
+		// Mengonversi data event untuk format yang diterima oleh Bootstrap Calendar
+		var calendarEvents = events.map(function(event) {
+			return {
+				title: event.title,
+				start: event.start,
+				className: 'bg-event', // Tambahkan kelas untuk styling event
+				description: event.description
+			};
+		});
+
+		// Inisialisasi kalender Bootstrap Calendar
+		$('#calendar').calendar({
+			dataSource: calendarEvents, // Menambahkan data event ke kalender
+			eventClick: function(event) {
+				alert(event.title + '\n' + event.description); // Menampilkan detail event
+			}
+		});
+	});
+</script>
 </body>
-<!-- [Body] end -->
 
 </html>
